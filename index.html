@@ -1,0 +1,2888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>BrandMeUp — Premium Brand Agency</title>
+<meta name="description" content="We research, script, shoot, edit and upload. You become the authority. Premium branding agency for founders, consultants and experts."/>
+<meta property="og:title" content="BrandMeUp — Premium Brand Agency"/>
+<meta property="og:description" content="Your brand. Your story. Your stage."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#050505;
+    --white:#fff;
+    --muted:#A1A1AA;
+    --accent:#C8FF4D;
+    --card:rgba(255,255,255,0.05);
+    --border:rgba(255,255,255,0.08);
+    --font-display:'ClashDisplay',sans-serif;
+    --font-body:'Inter',sans-serif;
+  }
+  @font-face{
+    font-family:'ClashDisplay';
+    src:url('https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff2') format('woff2');
+    font-display:swap;
+  }
+  html{scroll-behavior:smooth;overflow-x:hidden}
+  body{
+    background:var(--bg);
+    color:var(--white);
+    font-family:var(--font-body);
+    cursor:none;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--accent);color:#000}
+  a{color:inherit;text-decoration:none}
+
+  /* ── CURSOR ── */
+  #cursor{
+    width:12px;height:12px;
+    background:var(--accent);
+    border-radius:50%;
+    position:fixed;top:0;left:0;
+    pointer-events:none;z-index:9999;
+    transform:translate(-50%,-50%);
+    transition:width .3s,height .3s,background .3s;
+    mix-blend-mode:difference;
+  }
+  #cursor-trail{
+    width:40px;height:40px;
+    border:1px solid rgba(200,255,77,0.4);
+    border-radius:50%;
+    position:fixed;top:0;left:0;
+    pointer-events:none;z-index:9998;
+    transform:translate(-50%,-50%);
+    transition:transform .12s ease,width .3s,height .3s;
+  }
+  body:has(a:hover) #cursor,
+  body:has(button:hover) #cursor{width:32px;height:32px;}
+
+  /* ── PROGRESS BAR ── */
+  #progress-bar{
+    position:fixed;top:0;left:0;height:2px;
+    background:var(--accent);z-index:9997;
+    width:0%;transition:width .1s linear;
+  }
+
+  /* ── LOADER ── */
+  #loader{
+    position:fixed;inset:0;background:#000;
+    z-index:9990;display:flex;align-items:center;
+    justify-content:center;flex-direction:column;
+    overflow:hidden;
+  }
+  #loader-logo{
+    display:flex;gap:0;align-items:flex-end;
+    font-family:var(--font-body);
+    font-size:clamp(40px,8vw,100px);
+    font-weight:700;letter-spacing:-0.02em;
+    color:#fff;overflow:visible;
+  }
+  .loader-letter{
+    display:inline-block;
+    opacity:0;transform:translateY(60px) rotateX(-90deg);
+    transform-origin:bottom center;
+  }
+  #loader-u{
+    position:relative;display:inline-block;
+    transition:all .6s cubic-bezier(.23,1,.32,1);
+  }
+  #arrow-container{
+    position:absolute;bottom:0;left:50%;
+    transform:translateX(-50%);
+    opacity:0;
+  }
+  #loader-tagline{
+    font-size:14px;letter-spacing:.3em;text-transform:uppercase;
+    color:var(--muted);opacity:0;margin-top:2rem;
+  }
+
+  /* ── NAV ── */
+  nav{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    padding:24px 48px;
+    display:flex;align-items:center;justify-content:space-between;
+    backdrop-filter:blur(24px);
+    background:rgba(5,5,5,0.6);
+    border-bottom:1px solid var(--border);
+    transition:padding .3s;
+  }
+  nav.scrolled{padding:16px 48px}
+  .nav-logo{
+    font-weight:700;font-size:18px;letter-spacing:-.02em;
+  }
+  .nav-logo span{color:var(--accent)}
+  .nav-links{display:flex;gap:40px;font-size:13px;color:var(--muted)}
+  .nav-links a{transition:color .2s;letter-spacing:.02em}
+  .nav-links a:hover{color:var(--white)}
+  .nav-cta{
+    background:var(--accent);color:#000;
+    font-size:13px;font-weight:600;
+    padding:10px 24px;border-radius:100px;
+    border:none;cursor:pointer;
+    transition:transform .2s,box-shadow .2s;
+    letter-spacing:.02em;
+  }
+  .nav-cta:hover{transform:scale(1.05);box-shadow:0 0 32px rgba(200,255,77,.3)}
+
+  /* ── HERO ── */
+  #hero{
+    min-height:100vh;display:flex;align-items:center;
+    padding:0 48px;position:relative;overflow:hidden;
+    padding-top:120px;
+  }
+  .hero-content{flex:1;max-width:680px;z-index:2}
+  .hero-eyebrow{
+    font-size:11px;letter-spacing:.25em;text-transform:uppercase;
+    color:var(--accent);margin-bottom:32px;
+    display:flex;align-items:center;gap:12px;
+    opacity:0;transform:translateY(20px);
+  }
+  .hero-eyebrow::before{
+    content:'';width:40px;height:1px;background:var(--accent);
+  }
+  .hero-headline{
+    font-size:clamp(48px,7vw,96px);
+    font-weight:700;line-height:1;letter-spacing:-.04em;
+    margin-bottom:32px;
+  }
+  .hero-headline .line{
+    display:block;overflow:hidden;
+  }
+  .hero-headline .line span{
+    display:block;transform:translateY(100%);
+    opacity:0;
+  }
+  .hero-sub{
+    font-size:18px;color:var(--muted);line-height:1.7;
+    max-width:460px;margin-bottom:48px;
+    opacity:0;transform:translateY(20px);
+  }
+  .hero-sub strong{color:var(--white);font-weight:500}
+  .hero-actions{display:flex;gap:16px;flex-wrap:wrap;opacity:0;transform:translateY(20px)}
+  .btn-primary{
+    background:var(--accent);color:#000;
+    font-size:14px;font-weight:600;
+    padding:14px 32px;border-radius:100px;
+    border:none;cursor:pointer;
+    transition:transform .2s,box-shadow .3s;
+    letter-spacing:.02em;
+  }
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 48px rgba(200,255,77,.25)}
+  .btn-secondary{
+    background:transparent;color:var(--white);
+    font-size:14px;font-weight:500;
+    padding:14px 32px;border-radius:100px;
+    border:1px solid var(--border);cursor:pointer;
+    transition:all .2s;letter-spacing:.02em;
+  }
+  .btn-secondary:hover{border-color:rgba(255,255,255,.3);background:var(--card)}
+
+  /* ── 3D ORBITAL (CSS) ── */
+  .hero-visual{
+    flex:1;display:flex;align-items:center;justify-content:center;
+    position:relative;height:500px;
+  }
+  .orbital-center{
+    width:100px;height:100px;
+    background:radial-gradient(circle at 30% 30%,rgba(200,255,77,.3),rgba(200,255,77,.05));
+    border:1px solid rgba(200,255,77,.3);
+    border-radius:50%;display:flex;align-items:center;justify-content:center;
+    font-size:28px;position:relative;z-index:2;
+    box-shadow:0 0 60px rgba(200,255,77,.15),0 0 0 20px rgba(200,255,77,.03);
+    animation:pulse-center 3s ease-in-out infinite;
+  }
+  @keyframes pulse-center{
+    0%,100%{box-shadow:0 0 60px rgba(200,255,77,.15),0 0 0 20px rgba(200,255,77,.03)}
+    50%{box-shadow:0 0 80px rgba(200,255,77,.25),0 0 0 30px rgba(200,255,77,.06)}
+  }
+  .orbit-ring{
+    position:absolute;border:1px solid rgba(255,255,255,.06);
+    border-radius:50%;animation:spin linear infinite;
+  }
+  .orbit-ring:nth-child(2){width:200px;height:200px;animation-duration:12s}
+  .orbit-ring:nth-child(3){width:300px;height:300px;animation-duration:20s;animation-direction:reverse}
+  .orbit-ring:nth-child(4){width:400px;height:400px;animation-duration:30s}
+  @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+  .orbit-node{
+    position:absolute;width:84px;height:36px;
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.1);
+    border-radius:100px;display:flex;align-items:center;
+    justify-content:center;font-size:11px;font-weight:600;
+    letter-spacing:.08em;text-transform:uppercase;color:var(--white);
+    white-space:nowrap;
+    animation:counter-spin linear infinite;
+    top:50%;left:50%;transform-origin:0 0;
+  }
+  .r2 .orbit-node{animation-duration:12s}
+  .r3 .orbit-node{animation-duration:20s;animation-direction:reverse}
+  .r4 .orbit-node{animation-duration:30s}
+  @keyframes counter-spin{from{transform:translate(-50%,-50%) rotate(0deg)}to{transform:translate(-50%,-50%) rotate(-360deg)}}
+
+  /* ── SECTION SHARED ── */
+  section{padding:120px 48px;position:relative}
+  .section-eyebrow{
+    font-size:11px;letter-spacing:.25em;text-transform:uppercase;
+    color:var(--accent);margin-bottom:24px;
+    display:flex;align-items:center;gap:12px;
+  }
+  .section-eyebrow::before{content:'';width:24px;height:1px;background:var(--accent)}
+  .section-title{
+    font-size:clamp(36px,5vw,72px);
+    font-weight:700;line-height:1.05;letter-spacing:-.03em;
+    margin-bottom:24px;
+  }
+  .section-title .accent{color:var(--accent)}
+  .reveal-up{opacity:0;transform:translateY(40px)}
+
+  /* ── PROBLEM: HORIZONTAL SCROLL ── */
+  /*
+    Layout contract:
+    • #problem-wrapper  — sets the scroll budget: height = N panels × 100vh
+                          (N = 5 panels: 1 intro + 4 problems)
+                          position:relative so the sticky child pins to it.
+    • #problem-sticky   — position:sticky; top:0; height:100vh
+                          clips the horizontal track so nothing bleeds out.
+    • #problem-track    — display:flex; width = N×100vw; height:100%
+                          translated left by GSAP as user scrolls.
+    • .problem-panel    — width:100vw; height:100%; flex-shrink:0
+                          overflow:hidden so large decorative numbers
+                          never escape their panel.
+    CRITICAL: #problem-wrapper must NOT have overflow:hidden —
+    that breaks position:sticky on children.
+    The clip is handled by #problem-sticky's overflow:hidden.
+  */
+  #problem-wrapper{
+    /* 5 panels × 100vh = 500vh scroll budget */
+    height:500vh;
+    position:relative;
+    /* DO NOT set overflow:hidden here — breaks sticky */
+  }
+  #problem-sticky{
+    position:sticky;
+    top:0;
+    height:100vh;
+    overflow:hidden;   /* clips the moving track — panels never escape */
+    z-index:2;
+  }
+  #problem-track{
+    display:flex;
+    /* Exact width: 5 panels × 100vw */
+    width:500vw;
+    height:100%;       /* fills the 100vh sticky container exactly */
+    will-change:transform;
+  }
+  .problem-panel{
+    /* Each panel owns exactly one viewport width */
+    width:100vw;
+    flex-shrink:0;     /* never shrink — must stay exactly 100vw */
+    height:100%;       /* fills the 100vh track height */
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:80px;
+    border-right:1px solid var(--border);
+    position:relative;
+    overflow:hidden;   /* decorative numbers stay inside */
+    box-sizing:border-box;
+  }
+  /* Decorative giant number — absolutely positioned, clipped by panel */
+  .problem-number{
+    font-size:clamp(100px,18vw,200px);
+    font-weight:800;
+    position:absolute;
+    opacity:.04;
+    letter-spacing:-.05em;
+    color:#fff;
+    top:50%;left:50%;
+    transform:translate(-50%,-50%);
+    pointer-events:none;
+    user-select:none;
+    white-space:nowrap;
+  }
+  /* Per-panel animated canvas background */
+  .problem-panel-canvas{
+    position:absolute;
+    inset:0;
+    width:100%;height:100%;
+    pointer-events:none;
+    z-index:0;
+    opacity:.5;
+  }
+  /* All panel content must sit above its canvas */
+  .problem-panel > *:not(.problem-panel-canvas):not(.problem-number){
+    position:relative;
+    z-index:1;
+  }
+  .problem-icon{
+    font-size:72px;
+    margin-bottom:32px;
+    filter:drop-shadow(0 0 32px rgba(200,255,77,.35));
+    animation:float 4s ease-in-out infinite;
+  }
+  .problem-panel:nth-child(2) .problem-icon{animation-delay:0s}
+  .problem-panel:nth-child(3) .problem-icon{animation-delay:.6s}
+  .problem-panel:nth-child(4) .problem-icon{animation-delay:1.2s}
+  .problem-panel:nth-child(5) .problem-icon{animation-delay:1.8s}
+  @keyframes float{
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-14px)}
+  }
+  .problem-label{
+    font-size:11px;letter-spacing:.25em;text-transform:uppercase;
+    color:var(--accent);margin-bottom:24px;
+    display:flex;align-items:center;gap:10px;
+  }
+  .problem-label::before{
+    content:'';width:24px;height:1px;background:var(--accent);flex-shrink:0;
+  }
+  .problem-headline{
+    font-size:clamp(28px,4.5vw,68px);
+    font-weight:700;
+    line-height:1.05;
+    letter-spacing:-.03em;
+    text-align:center;
+    max-width:680px;
+    word-break:break-word;
+  }
+  .problem-desc{
+    font-size:16px;color:var(--muted);margin-top:24px;
+    text-align:center;max-width:480px;line-height:1.75;
+  }
+  /* Responsive: on mobile, switch to vertical scroll */
+  @media(max-width:768px){
+    #problem-wrapper{height:auto}
+    #problem-sticky{position:static;height:auto;overflow:visible}
+    #problem-track{
+      width:100%;
+      flex-direction:column;
+      height:auto;
+    }
+    .problem-panel{
+      width:100%;
+      height:auto;
+      min-height:100svh;
+      padding:100px 24px 80px;
+    }
+    .problem-panel-canvas{display:none}
+  }
+
+  /* ══════════════════════════════════════════
+     SOLUTION SECTION — FULLY REBUILT
+     Architecture: scroll-pinned two-column grid.
+     Left col: sticky display card (fixed in viewport).
+     Right col: scrollable stage list.
+     No absolute positioning. No z-index conflicts.
+     Every element contained within its own flow.
+  ══════════════════════════════════════════ */
+
+  /* Section wrapper — establishes the scroll context */
+  #solution{
+    background:transparent;
+    padding:0;
+    position:relative;
+    z-index:1;
+    overflow:visible;
+  }
+  /* Animated background canvas, fully behind all content */
+  #solution-canvas{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    pointer-events:none;
+    z-index:0;
+    opacity:.55;
+  }
+
+  /* Inner content wrapper — provides the padding the section used to have */
+  .solution-inner{
+    position:relative;
+    z-index:2;
+    padding:120px 48px;
+  }
+
+  /* Header block */
+  .solution-header{
+    margin-bottom:80px;
+  }
+
+  /* ── Two-column scroll layout ──
+     The outer wrapper is the scroll container reference for GSAP.
+     It must NOT be overflow:hidden (that breaks sticky).
+     Height is set dynamically by JS based on stage count.
+  */
+  .pipeline-scroll-outer{
+    position:relative;
+    /* height set by JS: stages * stageHeight + viewportHeight */
+  }
+
+  /* The sticky container holds both columns and sticks during scroll */
+  .pipeline-sticky-container{
+    position:sticky;
+    top:0;
+    height:100vh;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:0;
+    overflow:hidden;         /* clip both columns to viewport height */
+    align-items:stretch;
+  }
+
+  /* ── LEFT COLUMN: display card ── */
+  .pipeline-left{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:60px 48px 60px 0;
+    position:relative;
+  }
+
+  /* The display card itself */
+  .pipeline-display{
+    width:100%;
+    max-width:520px;
+    background:rgba(255,255,255,0.04);
+    border:1px solid var(--border);
+    border-radius:24px;
+    padding:48px;
+    position:relative;
+    overflow:hidden;
+    /* NO sticky/absolute/transform — it's already inside the sticky container */
+  }
+  /* Subtle inner glow that intensifies when active */
+  .pipeline-display::before{
+    content:'';
+    position:absolute;
+    inset:0;
+    border-radius:24px;
+    background:radial-gradient(ellipse at 30% 20%, rgba(200,255,77,.07), transparent 65%);
+    pointer-events:none;
+    transition:opacity .6s;
+  }
+  /* Scanline texture for the "terminal" feel */
+  .pipeline-display::after{
+    content:'';
+    position:absolute;
+    inset:0;
+    border-radius:24px;
+    background:repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 3px,
+      rgba(255,255,255,.008) 3px,
+      rgba(255,255,255,.008) 4px
+    );
+    pointer-events:none;
+  }
+  .display-stage-badge{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:10px;letter-spacing:.25em;text-transform:uppercase;
+    color:var(--accent);font-weight:700;margin-bottom:28px;
+    padding:6px 14px;border-radius:100px;
+    border:1px solid rgba(200,255,77,.25);
+    background:rgba(200,255,77,.06);
+  }
+  .display-stage-badge .badge-dot{
+    width:6px;height:6px;border-radius:50%;
+    background:var(--accent);
+    animation:badge-pulse 1.5s ease-in-out infinite;
+  }
+  @keyframes badge-pulse{
+    0%,100%{opacity:1;transform:scale(1)}
+    50%{opacity:.4;transform:scale(.7)}
+  }
+  .display-title{
+    font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--muted);margin-bottom:20px;
+    position:relative;z-index:1;
+  }
+  .display-content{
+    font-size:clamp(16px,1.6vw,22px);
+    font-weight:500;line-height:1.6;
+    letter-spacing:-.01em;
+    color:var(--white);
+    white-space:pre-line;
+    word-break:break-word;
+    position:relative;z-index:1;
+    min-height:180px;
+  }
+  /* Accent highlight inside display content */
+  .display-content .hl{color:var(--accent)}
+
+  /* Display card canvas — pipeline flow animation */
+  #display-canvas{
+    position:absolute;
+    bottom:0;left:0;right:0;
+    height:100px;
+    pointer-events:none;
+    z-index:0;
+    opacity:.6;
+    border-radius:0 0 24px 24px;
+  }
+
+  /* Progress dots along bottom of card */
+  .display-progress{
+    display:flex;gap:8px;margin-top:32px;position:relative;z-index:1;
+  }
+  .display-dot{
+    height:3px;flex:1;border-radius:2px;
+    background:var(--border);
+    transition:background .4s,transform .3s;
+  }
+  .display-dot.done{background:rgba(200,255,77,.4)}
+  .display-dot.current{background:var(--accent);transform:scaleY(2)}
+
+  /* ── RIGHT COLUMN: stage list ── */
+  .pipeline-right{
+    border-left:1px solid var(--border);
+    padding:60px 0 60px 48px;
+    overflow:hidden;    /* clips the translated list — never leaks */
+    position:relative;
+  }
+
+  /* The moving list — translated by GSAP */
+  .pipeline-stages-track{
+    will-change:transform;
+    /* height is auto — content determines it */
+  }
+
+  /* Individual stage row */
+  .pipeline-stage{
+    display:grid;
+    grid-template-columns:40px 56px 1fr;
+    gap:0 24px;
+    align-items:start;
+    padding:40px 0;
+    border-bottom:1px solid var(--border);
+    opacity:.28;
+    transition:opacity .5s cubic-bezier(.23,1,.32,1);
+    position:relative;
+    /* NO absolute positioning at all */
+  }
+  .pipeline-stage:first-child{padding-top:0}
+  .pipeline-stage:last-child{border-bottom:none}
+  .pipeline-stage.active{opacity:1}
+
+  .stage-number{
+    font-size:10px;letter-spacing:.18em;color:var(--accent);
+    font-weight:700;padding-top:6px;
+    line-height:1;
+  }
+  .stage-icon{
+    width:56px;height:56px;border-radius:16px;
+    background:var(--card);border:1px solid var(--border);
+    display:flex;align-items:center;justify-content:center;
+    font-size:22px;flex-shrink:0;
+    transition:all .5s cubic-bezier(.23,1,.32,1);
+  }
+  .pipeline-stage.active .stage-icon{
+    background:rgba(200,255,77,.1);
+    border-color:rgba(200,255,77,.35);
+    box-shadow:0 0 24px rgba(200,255,77,.12);
+  }
+  .stage-content{
+    min-width:0;  /* critical: prevents grid blowout */
+  }
+  .stage-content h3{
+    font-size:22px;font-weight:600;margin-bottom:8px;
+    letter-spacing:-.02em;line-height:1.2;
+  }
+  .stage-content p{
+    font-size:14px;color:var(--muted);line-height:1.75;
+    max-width:400px;
+    word-wrap:break-word;
+  }
+  /* Progress bar inside each stage */
+  .stage-progress{
+    grid-column:2 / 4;
+    margin-top:20px;
+    height:2px;
+    background:var(--border);
+    border-radius:2px;
+    overflow:hidden;
+  }
+  .stage-progress-fill{
+    height:100%;
+    background:linear-gradient(90deg,rgba(200,255,77,.6),var(--accent));
+    width:0%;
+    border-radius:2px;
+    transition:width 1.2s cubic-bezier(.23,1,.32,1);
+  }
+  .pipeline-stage.active .stage-progress-fill{width:100%}
+
+  /* ── MOBILE FALLBACK (≤1024px): stack vertically, no sticky scroll ── */
+  @media(max-width:1024px){
+    .pipeline-scroll-outer{height:auto !important}
+    .pipeline-sticky-container{
+      position:static;
+      height:auto;
+      display:block;
+      overflow:visible;
+    }
+    .pipeline-left{
+      padding:0 0 48px 0;
+      justify-content:flex-start;
+    }
+    .pipeline-display{
+      max-width:100%;
+      min-height:auto;
+    }
+    .display-content{min-height:auto}
+    .pipeline-right{
+      border-left:none;
+      border-top:1px solid var(--border);
+      padding:48px 0 0 0;
+      overflow:visible;
+    }
+    .pipeline-stages-track{
+      transform:none !important; /* disable GSAP translate on mobile */
+    }
+    .pipeline-stage{opacity:1}
+    .pipeline-stage.active{opacity:1}
+    .stage-progress-fill{width:100% !important}
+  }
+  @media(max-width:640px){
+    .pipeline-stage{
+      grid-template-columns:32px 44px 1fr;
+      gap:0 16px;
+      padding:32px 0;
+    }
+    .stage-icon{width:44px;height:44px;font-size:18px}
+    .stage-content h3{font-size:18px}
+    .solution-inner{padding:80px 24px}
+  }
+
+  /* ── WHY US ── */
+  #why-us{background:transparent}
+  .why-grid{
+    display:grid;grid-template-columns:repeat(2,1fr);
+    gap:2px;margin-top:80px;
+  }
+  .why-block{opacity: 1;
+transform: none ;
+    background:var(--card);border:1px solid var(--border);
+    padding:56px 48px;position:relative;overflow:hidden;
+    transition:background .3s;
+  }
+  .why-block:hover{background:rgba(255,255,255,.08)}
+  .why-block::before{
+    content:'';position:absolute;top:0;left:0;right:0;
+    height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);
+    opacity:0;transition:opacity .4s;
+  }
+  .why-block:hover::before{opacity:1}
+  .why-num{
+    font-size:11px;letter-spacing:.2em;color:var(--accent);
+    font-weight:600;margin-bottom:32px;
+  }
+  .why-title{font-size:28px;font-weight:600;letter-spacing:-.02em;margin-bottom:16px}
+  .why-desc{font-size:15px;color:var(--muted);line-height:1.8}
+  .why-icon{
+    font-size:48px;position:absolute;bottom:40px;right:48px;
+    opacity:.15;font-size:80px;
+  }
+
+  /* ── RESULTS ── */
+/* =========================
+   RESULTS SECTION
+========================= */
+
+#results{
+    background:linear-gradient(
+        180deg,
+        transparent,
+        rgba(200,255,77,.02),
+        transparent
+    );
+    text-align:center;
+    overflow:hidden;
+
+    display:block !important;
+    visibility:visible !important;
+    opacity:1 !important;
+
+    padding:120px 0;
+}
+
+.results-grid{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:24px;
+
+    max-width:1200px;
+    margin:80px auto 0;
+}
+
+.result-card{
+    background:var(--card);
+    border:1px solid var(--border);
+    position:relative;
+    overflow:hidden;
+
+    min-height:280px;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+
+    padding:56px 32px;
+
+    opacity:1 !important;
+    visibility:visible !important;
+}
+
+.result-card::after{
+    content:'';
+    position:absolute;
+    inset:0;
+
+    background:radial-gradient(
+        circle at 50% 0%,
+        rgba(200,255,77,.05),
+        transparent 70%
+    );
+
+    pointer-events:none;
+}
+
+.result-number{
+    font-size:clamp(48px,6vw,80px);
+    font-weight:800;
+    letter-spacing:-0.04em;
+    color:var(--white);
+
+    margin-bottom:12px;
+    display:block;
+}
+
+.result-number .accent{
+    color:var(--accent);
+}
+
+.result-label{
+    font-size:13px;
+    color:var(--muted);
+    letter-spacing:.08em;
+    text-transform:uppercase;
+}
+
+/* Tablet */
+@media (max-width:992px){
+    .results-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+
+/* Mobile */
+@media (max-width:768px){
+    .results-grid{
+        grid-template-columns:1fr;
+    }
+
+    .result-card{
+        height:380px !important;
+    }
+}
+  /* ── SERVICES ── */
+  #services{background:transparent}
+  .services-grid{
+    display:grid;grid-template-columns:1fr 1.6fr 1fr;
+    gap:16px;margin-top:80px;align-items:start;
+  }
+  .service-card{
+    background:var(--card);border:1px solid var(--border);
+    border-radius:24px;padding:40px;position:relative;overflow:hidden;
+    transition:transform .3s cubic-bezier(.23,1,.32,1),box-shadow .3s;
+    cursor:none;
+  }
+  .service-card:hover{
+    transform:translateY(-8px) scale(1.02);
+    box-shadow:0 32px 80px rgba(0,0,0,.5);
+  }
+  .service-card.featured{
+    background:rgba(200,255,77,.06);
+    border-color:rgba(200,255,77,.2);
+  }
+  .service-card.featured::before{
+    content:'FEATURED';
+    position:absolute;top:24px;right:24px;
+    font-size:10px;letter-spacing:.2em;
+    background:var(--accent);color:#000;
+    padding:4px 12px;border-radius:100px;font-weight:700;
+  }
+  .service-icon{font-size:40px;margin-bottom:32px}
+  .service-name{font-size:22px;font-weight:600;letter-spacing:-.02em;margin-bottom:16px}
+  .service-desc{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:32px}
+  .service-features{list-style:none}
+  .service-features li{
+    font-size:13px;color:var(--muted);padding:10px 0;
+    border-bottom:1px solid var(--border);
+    display:flex;align-items:center;gap:10px;
+  }
+  .service-features li::before{content:'↗';color:var(--accent);font-size:12px}
+  .service-price{
+    font-size:36px;font-weight:700;letter-spacing:-.03em;
+    margin-top:32px;color:var(--white);
+  }
+  .service-price span{font-size:14px;color:var(--muted);font-weight:400}
+
+  /* ── INVESTMENT ── */
+  #investment{background:transparent;text-align:center}
+  .investment-grid{
+    display:grid;grid-template-columns:1fr 1fr;gap:2px;
+    margin-top:80px;max-width:900px;margin-left:auto;margin-right:auto;
+  }
+  .plan-card{
+    padding:64px 48px;background:var(--card);
+    border:1px solid var(--border);position:relative;overflow:hidden;
+  }
+  .plan-card:first-child{border-radius:24px 0 0 24px}
+  .plan-card:last-child{border-radius:0 24px 24px 0;background:rgba(200,255,77,.04);border-color:rgba(200,255,77,.15)}
+  .plan-name{font-size:14px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:24px}
+  .plan-price{font-size:clamp(40px,5vw,72px);font-weight:800;letter-spacing:-.04em;margin-bottom:8px}
+  .plan-price sub{font-size:20px;font-weight:400;color:var(--muted);vertical-align:super;font-size:18px}
+  .plan-desc{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:40px}
+  .plan-features{list-style:none;text-align:left}
+  .plan-features li{
+    font-size:14px;color:var(--muted);padding:12px 0;
+    border-bottom:1px solid var(--border);
+    display:flex;align-items:center;gap:12px;
+  }
+  .plan-features li .check{color:var(--accent)}
+  .plan-btn,.plan-btn-outline{
+    width:100%;padding:16px;border-radius:100px;
+    font-size:14px;font-weight:600;cursor:pointer;
+    margin-top:40px;transition:all .3s;letter-spacing:.02em;
+  }
+  .plan-btn.outline{background:transparent;border:1px solid var(--border);color:var(--white)}
+  .plan-btn.filled{background:var(--accent);border:none;color:#000}
+  .plan-btn.outline:hover{border-color:rgba(255,255,255,.3)}
+  .plan-btn.filled:hover{box-shadow:0 16px 48px rgba(200,255,77,.3);transform:translateY(-2px)}
+
+/*updated by ritik*/
+
+#investment2{
+  background:transparent;
+  text-align:center;
+}
+
+.investment-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:2px;
+  margin-top:80px;
+  max-width:1350px;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+.plan-card{
+  padding:64px 48px;
+  background:var(--card);
+  border:1px solid var(--border);
+  position:relative;
+  overflow:hidden;
+}
+
+.plan-card:first-child{
+  border-radius:24px 0 0 24px;
+}
+
+.plan-card:nth-child(2){
+  border-radius:0;
+}
+
+.plan-card:last-child{
+  border-radius:0 24px 24px 0;
+  background:rgba(200,255,77,.04);
+  border-color:rgba(200,255,77,.15);
+}
+
+.plan-name{
+  font-size:14px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:24px;
+}
+
+.plan-price{
+  font-size:clamp(40px,5vw,72px);
+  font-weight:800;
+  letter-spacing:-.04em;
+  margin-bottom:8px;
+}
+
+.plan-price sub{
+  vertical-align:super;
+  font-size:18px;
+  font-weight:400;
+  color:var(--muted);
+}
+
+.plan-desc{
+  font-size:14px;
+  color:var(--muted);
+  line-height:1.7;
+  margin-bottom:40px;
+}
+
+.plan-features{
+  list-style:none;
+  text-align:left;
+  padding:0;
+  margin:0;
+}
+
+.plan-features li{
+  font-size:14px;
+  color:var(--muted);
+  padding:12px 0;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.plan-features li .check{
+  color:var(--accent);
+}
+
+.plan-btn{
+  width:100%;
+  padding:16px;
+  border-radius:100px;
+  font-size:14px;
+  font-weight:600;
+  cursor:pointer;
+  margin-top:40px;
+  transition:all .3s ease;
+  letter-spacing:.02em;
+}
+
+.plan-btn.outline{
+  background:transparent;
+  border:1px solid var(--border);
+  color:var(--white);
+}
+
+.plan-btn.filled{
+  background:var(--accent);
+  border:none;
+  color:#000;
+}
+
+.plan-btn.outline:hover{
+  border-color:rgba(255,255,255,.3);
+}
+
+.plan-btn.filled:hover{
+  box-shadow:0 16px 48px rgba(200,255,77,.3);
+  transform:translateY(-2px);
+}
+
+
+/* Tablet */
+@media (max-width:1100px){
+  .investment-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .plan-card:first-child{
+    border-radius:24px 0 0 0;
+  }
+
+  .plan-card:nth-child(2){
+    border-radius:0 24px 0 0;
+  }
+
+  .plan-card:last-child{
+    grid-column:span 2;
+    border-radius:0 0 24px 24px;
+  }
+}
+
+/* Mobile */
+@media (max-width:768px){
+  .investment-grid{
+    grid-template-columns:1fr;
+  }
+
+  .plan-card,
+  .plan-card:first-child,
+  .plan-card:nth-child(2),
+  .plan-card:last-child{
+    border-radius:24px;
+    grid-column:auto;
+  }
+
+  .plan-card{
+    padding:40px 24px;
+  }
+}
+
+  /* ── CTA SECTION ── */
+  #cta-section{
+    min-height:100vh;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;
+    text-align:center;padding:120px 48px;
+    position:relative;overflow:hidden;
+  }
+  #particles-canvas{
+    position:absolute;inset:0;opacity:.6;
+    pointer-events:none;
+  }
+  .cta-title{
+    font-size:clamp(48px,8vw,120px);font-weight:800;
+    letter-spacing:-.04em;line-height:.95;
+    position:relative;z-index:2;margin-bottom:48px;
+  }
+  .cta-title .line2{color:var(--accent)}
+  .arrow-up{
+    font-size:80px;display:block;margin-bottom:48px;
+    animation:bounce-up 2s ease-in-out infinite;
+    color:var(--accent);position:relative;z-index:2;
+  }
+  @keyframes bounce-up{
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-16px)}
+  }
+  .cta-btn-large{
+    background:var(--accent);color:#000;
+    font-size:16px;font-weight:700;
+    padding:20px 56px;border-radius:100px;
+    border:none;cursor:pointer;letter-spacing:.04em;
+    text-transform:uppercase;
+    transition:transform .2s,box-shadow .3s;
+    position:relative;z-index:2;
+  }
+  .cta-btn-large:hover{
+    transform:scale(1.05);
+    box-shadow:0 24px 80px rgba(200,255,77,.4);
+  }
+
+  /* ── PROCESS ── */
+  #process{background:transparent}
+  .timeline{
+    position:relative;padding-left:60px;margin-top:80px;
+  }
+  .timeline::before{
+    content:'';position:absolute;left:20px;top:0;bottom:0;
+    width:1px;background:var(--border);
+  }
+  .timeline-fill{
+    position:absolute;left:20px;top:0;
+    width:1px;background:var(--accent);
+    height:0%;transition:none;
+  }
+  .timeline-item{
+    position:relative;padding:40px 0;
+    border-bottom:1px solid var(--border);
+    display:flex;gap:48px;align-items:flex-start;
+  }
+  .timeline-dot{
+    position:absolute;left:-50px;top:44px;
+    width:20px;height:20px;border-radius:50%;
+    background:var(--bg);border:1px solid var(--border);
+    display:flex;align-items:center;justify-content:center;
+    transition:all .4s;
+  }
+  .timeline-dot::after{
+    content:'';width:6px;height:6px;border-radius:50%;
+    background:var(--muted);transition:background .4s;
+  }
+  .timeline-item.active .timeline-dot{
+    border-color:var(--accent);
+    box-shadow:0 0 0 6px rgba(200,255,77,.1);
+  }
+  .timeline-item.active .timeline-dot::after{background:var(--accent)}
+  .timeline-week{
+    font-size:11px;letter-spacing:.2em;color:var(--accent);
+    font-weight:600;min-width:80px;padding-top:4px;
+  }
+  .timeline-content h3{font-size:22px;font-weight:600;letter-spacing:-.02em;margin-bottom:8px}
+  .timeline-content p{font-size:14px;color:var(--muted);line-height:1.7}
+
+  /* ── CLIENTS ── */
+  #clients{background:transparent}
+  .clients-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);
+    gap:16px;margin-top:80px;
+  }
+  .client-card{
+    background:var(--card);border:1px solid var(--border);
+    border-radius:20px;padding:40px;
+    position:relative;overflow:hidden;cursor:none;
+    transition:all .4s cubic-bezier(.23,1,.32,1);
+    aspect-ratio:1;display:flex;flex-direction:column;
+    justify-content:flex-end;
+  }
+  .client-card::before{
+    content:'';position:absolute;inset:0;
+    background:linear-gradient(135deg,rgba(200,255,77,.08),transparent);
+    opacity:0;transition:opacity .4s;
+  }
+  .client-card:hover{transform:scale(1.03);border-color:rgba(200,255,77,.2)}
+  .client-card:hover::before{opacity:1}
+  .client-icon{
+    font-size:48px;position:absolute;top:40px;left:40px;
+    transition:transform .4s;
+  }
+  .client-card:hover .client-icon{transform:scale(1.2) rotate(-5deg)}
+  .client-name{font-size:20px;font-weight:600;letter-spacing:-.01em;margin-bottom:8px}
+  .client-tagline{font-size:13px;color:var(--muted)}
+  .client-result{
+    position:absolute;inset:0;background:rgba(5,5,5,.95);
+    display:flex;flex-direction:column;align-items:center;
+    justify-content:center;padding:40px;
+    opacity:0;transform:translateY(20px);
+    transition:all .4s cubic-bezier(.23,1,.32,1);
+  }
+  .client-card:hover .client-result{opacity:1;transform:translateY(0)}
+  .client-result-num{
+    font-size:56px;font-weight:800;color:var(--accent);
+    letter-spacing:-.04em;margin-bottom:8px;
+  }
+  .client-result-label{font-size:14px;color:var(--muted);text-align:center}
+
+  /* ── FOOTER ── */
+  footer{
+    padding:80px 48px 48px;
+    border-top:1px solid var(--border);
+  }
+  .footer-top{
+    display:flex;justify-content:space-between;align-items:flex-start;
+    margin-bottom:64px;
+  }
+  .footer-brand .logo{font-size:24px;font-weight:700;letter-spacing:-.02em;margin-bottom:12px}
+  .footer-brand .logo span{color:var(--accent)}
+  .footer-brand p{font-size:14px;color:var(--muted);max-width:280px;line-height:1.7}
+  .footer-links h4{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:24px}
+  .footer-links a{display:block;font-size:14px;color:var(--muted);margin-bottom:12px;transition:color .2s}
+  .footer-links a:hover{color:var(--white)}
+  .footer-bottom{
+    display:flex;justify-content:space-between;align-items:center;
+    padding-top:32px;border-top:1px solid var(--border);
+    font-size:13px;color:var(--muted);
+  }
+
+  /* ── SCROLL INDICATOR ── */
+  #scroll-indicator{
+    position:fixed;right:40px;top:50%;transform:translateY(-50%);
+    display:flex;flex-direction:column;gap:8px;z-index:99;
+    opacity:0;transition:opacity .3s;
+  }
+  #scroll-indicator.visible{opacity:1}
+  .scroll-dot{
+    width:4px;height:4px;border-radius:50%;
+    background:rgba(255,255,255,.2);transition:all .3s;
+  }
+  .scroll-dot.active{background:var(--accent);transform:scale(1.5)}
+
+  /* ── AMBIENT GRADIENT ── */
+  .ambient{
+    position:fixed;pointer-events:none;z-index:0;
+    border-radius:50%;filter:blur(100px);
+    animation:ambient-drift 20s ease-in-out infinite;
+  }
+  .ambient-1{
+    width:600px;height:600px;
+    background:radial-gradient(circle,rgba(200,255,77,.04),transparent);
+    top:-20%;right:-10%;
+  }
+  .ambient-2{
+    width:500px;height:500px;
+    background:radial-gradient(circle,rgba(100,100,255,.03),transparent);
+    bottom:20%;left:-5%;
+    animation-delay:-10s;
+  }
+  @keyframes ambient-drift{
+    0%,100%{transform:translate(0,0) scale(1)}
+    33%{transform:translate(30px,-30px) scale(1.05)}
+    66%{transform:translate(-20px,20px) scale(.95)}
+  }
+
+  /* ── ANIMATED SECTION BACKGROUNDS ── */
+
+  /* Problem section: subtle grid of fading cells */
+  #problem-bg-canvas{
+    position:absolute;inset:0;width:100%;height:100%;
+    pointer-events:none;z-index:0;opacity:.35;
+  }
+  /* Why Us section: floating orb network */
+  #why-bg-canvas{
+    position:absolute;inset:0;width:100%;height:100%;
+    pointer-events:none;z-index:0;opacity:.4;
+  }
+  /* Results section: rising bar-chart pulses */
+  #results-bg-canvas{
+    position:absolute;inset:0;width:100%;height:100%;
+    pointer-events:none;z-index:0;opacity:.35;
+  }
+  /* Services section: slow geometric grid */
+  #services-bg-canvas{
+    position:absolute;inset:0;width:100%;height:100%;
+    pointer-events:none;z-index:0;opacity:.3;
+  }
+  /* Ensure section children sit above their canvas */
+  #problem-wrapper > *,
+  #why-us > *:not(#why-bg-canvas),
+  #results > *:not(#results-bg-canvas),
+  #services > *:not(#services-bg-canvas){
+    position:relative;z-index:1;
+  }
+  /* Why-us and results need relative positioning for canvas */
+  #why-us,#results,#services{
+    position:relative;overflow:hidden;
+  }
+
+  /* ── GLASS DIVIDER ── */
+  .glass-divider{
+    height:1px;
+    background:linear-gradient(90deg,transparent,var(--border),transparent);
+    margin:0 48px;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media(max-width:1024px){
+    nav{padding:20px 24px}
+    .nav-links{display:none}
+    section{padding:80px 24px}
+    #hero{padding:100px 24px 80px;flex-direction:column;gap:48px}
+    .hero-visual{width:100%;height:300px}
+    .orbit-ring:nth-child(4){display:none}
+    .why-grid{grid-template-columns:1fr}
+    .results-grid{grid-template-columns:repeat(2,1fr)}
+    .services-grid{grid-template-columns:1fr}
+    .investment-grid{grid-template-columns:1fr}
+    .plan-card:first-child{border-radius:24px 24px 0 0}
+    .plan-card:last-child{border-radius:0 0 24px 24px}
+    .clients-grid{grid-template-columns:repeat(2,1fr)}
+    .footer-top{flex-direction:column;gap:48px}
+  }
+  @media(max-width:640px){
+    .results-grid{grid-template-columns:1fr 1fr}
+    .clients-grid{grid-template-columns:1fr}
+    .cta-title{font-size:48px}
+    .problem-headline{font-size:32px}
+    footer{padding:60px 24px 32px}
+    .footer-bottom{flex-direction:column;gap:16px;text-align:center}
+    .investment-grid{grid-template-columns:1fr;margin-top:48px}
+    .plan-card:first-child{border-radius:24px 24px 0 0}
+    .plan-card:last-child{border-radius:0 0 24px 24px}
+  }
+
+  /* ── TEXT GRADIENT ── */
+  .text-gradient{
+    background:linear-gradient(135deg,#fff 0%,var(--accent) 100%);
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+    background-clip:text;
+  }
+
+  /* ── MARQUEE ── */
+  .marquee-wrapper{overflow:hidden;padding:24px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin:0 0 0}
+  .marquee-track{
+    display:flex;gap:48px;width:max-content;
+    animation:marquee 20s linear infinite;
+  }
+  .marquee-track:hover{animation-play-state:paused}
+  .marquee-item{
+    font-size:13px;letter-spacing:.15em;text-transform:uppercase;
+    color:var(--muted);display:flex;align-items:center;gap:16px;
+    white-space:nowrap;
+  }
+  .marquee-item .dot{
+    width:4px;height:4px;border-radius:50%;
+    background:var(--accent);
+  }
+  @keyframes marquee{
+    from{transform:translateX(0)}
+    to{transform:translateX(-50%)}
+  }
+</style>
+</head>
+<body>
+
+<!-- Ambient glow -->
+<div class="ambient ambient-1"></div>
+<div class="ambient ambient-2"></div>
+
+<!-- Custom Cursor -->
+<div id="cursor"></div>
+<div id="cursor-trail"></div>
+
+<!-- Progress Bar -->
+<div id="progress-bar"></div>
+
+<!-- Scroll Indicator -->
+<div id="scroll-indicator">
+  <div class="scroll-dot active" data-section="hero"></div>
+  <div class="scroll-dot" data-section="problem"></div>
+  <div class="scroll-dot" data-section="solution"></div>
+  <div class="scroll-dot" data-section="results"></div>
+  <div class="scroll-dot" data-section="services"></div>
+  <div class="scroll-dot" data-section="cta"></div>
+</div>
+
+<!-- ══════════════ LOADER ══════════════ -->
+<div id="loader">
+  <div id="loader-logo">
+    <span class="loader-letter">B</span>
+    <span class="loader-letter">R</span>
+    <span class="loader-letter">A</span>
+    <span class="loader-letter">N</span>
+    <span class="loader-letter">D</span>
+    <span class="loader-letter">M</span>
+    <span class="loader-letter">E</span>
+    <span class="loader-letter" id="loader-u" style="color:var(--accent);position:relative">
+      U
+      <div id="arrow-container" style="font-size:clamp(20px,4vw,60px);line-height:1;color:var(--accent)">↑</div>
+    </span>
+    <span class="loader-letter">P</span>
+  </div>
+  <p id="loader-tagline">Premium Brand Agency</p>
+</div>
+
+<!-- ══════════════ NAV ══════════════ -->
+<nav id="nav">
+  <div class="nav-logo">Brand<span>Me</span>Up</div>
+  <div class="nav-links">
+    <a href="#problem-wrapper">Problem</a>
+    <a href="#solution">Solution</a>
+    <a href="#services">Services</a>
+    <a href="#investment">Pricing</a>
+    <a href="#process">Process</a>
+  </div>
+  <button class="nav-cta" onclick="scrollTo({top:document.body.scrollHeight,behavior:'smooth'})">Book Strategy Call</button>
+</nav>
+
+<!-- ══════════════ HERO ══════════════ -->
+<section id="hero">
+  <div class="hero-content">
+    <div class="hero-eyebrow">Premium Brand Agency</div>
+    <h1 class="hero-headline">
+      <div class="line"><span>Your Brand.</span></div>
+      <div class="line"><span>Your Story.</span></div>
+      <div class="line"><span class="text-gradient">Your Stage.</span></div>
+    </h1>
+    <p class="hero-sub">
+      We <strong>research, script, shoot, edit</strong> and upload.<br/>
+      You become the authority.
+    </p>
+    <div class="hero-actions">
+      <button class="btn-primary">Book Free Strategy Call</button>
+      <button class="btn-secondary">See How It Works ↓</button>
+    </div>
+  </div>
+  <div class="hero-visual" id="hero-visual">
+    <div class="orbital-center">🎯</div>
+    <!-- Ring 2 -->
+    <div class="orbit-ring r2" style="width:200px;height:200px">
+      <div class="orbit-node" style="top:0%;left:50%;transform:translate(-50%,-50%);animation:counter-spin 12s linear infinite">Authority</div>
+    </div>
+    <!-- Ring 3 -->
+    <div class="orbit-ring r3" style="width:310px;height:310px">
+      <div class="orbit-node" style="top:0%;left:50%;transform:translate(-50%,-50%);animation:counter-spin 20s linear infinite reverse">Followers</div>
+      <div class="orbit-node" style="top:100%;left:50%;transform:translate(-50%,-50%);animation:counter-spin 20s linear infinite reverse">Trust</div>
+    </div>
+    <!-- Ring 4 -->
+    <div class="orbit-ring r4" style="width:430px;height:430px">
+      <div class="orbit-node" style="top:0%;left:50%;transform:translate(-50%,-50%);animation:counter-spin 30s linear infinite">Leads</div>
+      <div class="orbit-node" style="top:50%;left:100%;transform:translate(-50%,-50%);animation:counter-spin 30s linear infinite">Revenue</div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrapper">
+  <div class="marquee-track" id="marquee">
+    <div class="marquee-item"><span class="dot"></span>Brand Strategy</div>
+    <div class="marquee-item"><span class="dot"></span>Visual Identity</div>
+    <div class="marquee-item"><span class="dot"></span>Content Production</div>
+    <div class="marquee-item"><span class="dot"></span>Meta Ads</div>
+    <div class="marquee-item"><span class="dot"></span>Social Growth</div>
+    <div class="marquee-item"><span class="dot"></span>Thought Leadership</div>
+    <div class="marquee-item"><span class="dot"></span>Brand Messaging</div>
+    <div class="marquee-item"><span class="dot"></span>Done For You</div>
+    <div class="marquee-item"><span class="dot"></span>Brand Strategy</div>
+    <div class="marquee-item"><span class="dot"></span>Visual Identity</div>
+    <div class="marquee-item"><span class="dot"></span>Content Production</div>
+    <div class="marquee-item"><span class="dot"></span>Meta Ads</div>
+    <div class="marquee-item"><span class="dot"></span>Social Growth</div>
+    <div class="marquee-item"><span class="dot"></span>Thought Leadership</div>
+    <div class="marquee-item"><span class="dot"></span>Brand Messaging</div>
+    <div class="marquee-item"><span class="dot"></span>Done For You</div>
+  </div>
+</div>
+
+<!-- ══════════════ SECTION 1: THE PROBLEM ══════════════ -->
+<!--
+  SCROLL CONTRACT:
+  #problem-wrapper height = 500vh (5 panels × 100vh scroll budget).
+  GSAP: start='top top', end='bottom bottom'
+  → pin releases exactly when the last panel finishes, before Solution appears.
+-->
+<div id="problem-wrapper">
+  <div id="problem-sticky">
+    <div id="problem-track">
+
+      <!-- Panel 0: Intro -->
+      <div class="problem-panel">
+        <canvas class="problem-panel-canvas" id="prob-canvas-0"></canvas>
+        <div class="problem-number">00</div>
+        <div class="section-eyebrow" style="justify-content:center;position:relative;z-index:1">The Problem</div>
+        <h2 class="section-title" style="text-align:center;position:relative;z-index:1">Why Most Personal<br>Brands <span class="accent">Fail</span></h2>
+        <p style="font-size:16px;color:var(--muted);text-align:center;max-width:420px;margin-top:20px;line-height:1.75;position:relative;z-index:1">The same four walls keep brilliant people invisible. Scroll to see which one is stopping you.</p>
+      </div>
+
+      <!-- Panel 1 -->
+      <div class="problem-panel">
+        <canvas class="problem-panel-canvas" id="prob-canvas-1"></canvas>
+        <div class="problem-number">01</div>
+        <div class="problem-icon">⏱️</div>
+        <div class="problem-label">Problem 01</div>
+        <h3 class="problem-headline">No time to<br>create content.</h3>
+        <p class="problem-desc">You're too busy running your business to run your brand. The content never gets made.</p>
+      </div>
+
+      <!-- Panel 2 -->
+      <div class="problem-panel">
+        <canvas class="problem-panel-canvas" id="prob-canvas-2"></canvas>
+        <div class="problem-number">02</div>
+        <div class="problem-icon">🤷</div>
+        <div class="problem-label">Problem 02</div>
+        <h3 class="problem-headline">Don't know<br>what to say.</h3>
+        <p class="problem-desc">You have expertise but no framework to turn it into compelling content that converts.</p>
+      </div>
+
+      <!-- Panel 3 -->
+      <div class="problem-panel">
+        <canvas class="problem-panel-canvas" id="prob-canvas-3"></canvas>
+        <div class="problem-number">03</div>
+        <div class="problem-icon">💸</div>
+        <div class="problem-label">Problem 03</div>
+        <h3 class="problem-headline">Production is<br>expensive.</h3>
+        <p class="problem-desc">Studios, editors, designers — good production costs a fortune when you piece it together alone.</p>
+      </div>
+
+      <!-- Panel 4 -->
+      <div class="problem-panel">
+        <canvas class="problem-panel-canvas" id="prob-canvas-4"></canvas>
+        <div class="problem-number">04</div>
+        <div class="problem-icon">📉</div>
+        <div class="problem-label">Problem 04</div>
+        <h3 class="problem-headline">No strategy.<br>No growth.</h3>
+        <p class="problem-desc">Posting randomly and hoping for the best. Without a strategy, effort doesn't compound.</p>
+      </div>
+
+    </div><!-- /#problem-track -->
+  </div><!-- /#problem-sticky -->
+</div><!-- /#problem-wrapper -->
+
+<!-- ══════════════ SECTION 2: THE SOLUTION ══════════════ -->
+<section id="solution">
+  <!-- Animated background: flowing data-stream lines -->
+  <canvas id="solution-canvas"></canvas>
+
+  <div class="solution-inner">
+    <!-- Header -->
+    <div class="solution-header">
+      <div class="section-eyebrow">The Solution</div>
+      <h2 class="section-title">We Do Everything.<br><span class="accent">You Just Show Up.</span></h2>
+    </div>
+
+    <!--
+      SCROLL ARCHITECTURE:
+      • .pipeline-scroll-outer  → tall element that creates scroll distance (height set by JS)
+      • .pipeline-sticky-container → position:sticky; height:100vh; clips both columns
+      • .pipeline-left  → display card (static inside sticky container)
+      • .pipeline-right → overflow:hidden wrapper; GSAP translates .pipeline-stages-track up
+    -->
+    <div class="pipeline-scroll-outer" id="pipeline-scroll-outer">
+      <div class="pipeline-sticky-container" id="pipeline-sticky-container">
+
+        <!-- LEFT: Display card -->
+        <div class="pipeline-left">
+          <div class="pipeline-display" id="pipeline-display">
+            <div class="display-stage-badge">
+              <span class="badge-dot"></span>
+              <span id="display-badge-text">Pipeline</span>
+            </div>
+            <div class="display-title" id="display-title">CURRENT STAGE</div>
+            <div class="display-content" id="display-content">Your brand transformation starts here. Scroll through the pipeline to see exactly what we do for you — start to finish.</div>
+            <canvas id="display-canvas"></canvas>
+            <div class="display-progress" id="display-progress">
+              <div class="display-dot" data-idx="0"></div>
+              <div class="display-dot" data-idx="1"></div>
+              <div class="display-dot" data-idx="2"></div>
+              <div class="display-dot" data-idx="3"></div>
+              <div class="display-dot" data-idx="4"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: Scrolling stage list -->
+        <div class="pipeline-right" id="pipeline-right">
+          <div class="pipeline-stages-track" id="pipeline-stages-track">
+
+            <div class="pipeline-stage" data-stage="0">
+              <div class="stage-number">01</div>
+              <div class="stage-icon">🔬</div>
+              <div class="stage-content">
+                <h3>Research</h3>
+                <p>Deep competitive analysis. Audience profiling. Trend mapping. We build your strategy on data, not assumptions.</p>
+              </div>
+              <div class="stage-progress"><div class="stage-progress-fill"></div></div>
+            </div>
+
+            <div class="pipeline-stage" data-stage="1">
+              <div class="stage-number">02</div>
+              <div class="stage-icon">✍️</div>
+              <div class="stage-content">
+                <h3>Script</h3>
+                <p>We write every word. Every post, video script, caption — crafted to sound exactly like you, only sharper.</p>
+              </div>
+              <div class="stage-progress"><div class="stage-progress-fill"></div></div>
+            </div>
+
+            <div class="pipeline-stage" data-stage="2">
+              <div class="stage-number">03</div>
+              <div class="stage-icon">🎬</div>
+              <div class="stage-content">
+                <h3>Shoot</h3>
+                <p>Cinematic production. Studio-quality gear, professional direction, multiple formats captured in one session.</p>
+              </div>
+              <div class="stage-progress"><div class="stage-progress-fill"></div></div>
+            </div>
+
+            <div class="pipeline-stage" data-stage="3">
+              <div class="stage-number">04</div>
+              <div class="stage-icon">🎞️</div>
+              <div class="stage-content">
+                <h3>Edit</h3>
+                <p>Premium post-production. Color grading, motion graphics, captions, multi-format export. Everything optimised.</p>
+              </div>
+              <div class="stage-progress"><div class="stage-progress-fill"></div></div>
+            </div>
+
+            <div class="pipeline-stage" data-stage="4">
+              <div class="stage-number">05</div>
+              <div class="stage-icon">🚀</div>
+              <div class="stage-content">
+                <h3>Upload</h3>
+                <p>Strategic scheduling. Platform-native formatting. Engagement monitoring. Your audience grows while you work.</p>
+              </div>
+              <div class="stage-progress"><div class="stage-progress-fill"></div></div>
+            </div>
+
+          </div><!-- /pipeline-stages-track -->
+        </div><!-- /pipeline-right -->
+
+      </div><!-- /pipeline-sticky-container -->
+    </div><!-- /pipeline-scroll-outer -->
+  </div><!-- /solution-inner -->
+</section>
+
+<div class="glass-divider"></div>
+
+<!-- ══════════════ SECTION 3: WHY US ══════════════ -->
+<section id="why-us">
+  <canvas id="why-bg-canvas"></canvas>
+  <div class="section-eyebrow">Why Us</div>
+  <h2 class="section-title">Six Reasons<br>We're <span class="accent">Different</span></h2>
+  <div class="why-grid">
+    <div class="why-block reveal-up">
+      <div class="why-num">01</div>
+      <h3 class="why-title">Research First</h3>
+      <p class="why-desc">Every brand we build is rooted in data. We study your audience, your competition, and your category before a single word is written or a frame is shot.</p>
+      <div class="why-icon">🧠</div>
+    </div>
+    <div class="why-block reveal-up" style="transition-delay:.1s">
+      <div class="why-num">02</div>
+      <h3 class="why-title">Full Production</h3>
+      <p class="why-desc">Strategy to upload — we own the entire workflow. No freelancer juggling. No production chaos. One team that delivers with the precision of a premium studio.</p>
+      <div class="why-icon">🎬</div>
+    </div>
+    <div class="why-block reveal-up" style="transition-delay:.15s">
+      <div class="why-num">03</div>
+      <h3 class="why-title">You Sound Like You</h3>
+      <p class="why-desc">We don't give you a template. We extract your thinking, your language, your authority — and build content that's unmistakably you, elevated.</p>
+      <div class="why-icon">🎯</div>
+    </div>
+    <div class="why-block reveal-up" style="transition-delay:.2s">
+      <div class="why-num">04</div>
+      <h3 class="why-title">Strategy Led</h3>
+      <p class="why-desc">Every post has a purpose. Every piece of content fits a larger system designed to convert attention into revenue. No random posting. Pure intent.</p>
+      <div class="why-icon">📊</div>
+    </div>
+    <div class="why-block reveal-up" style="transition-delay:.25s">
+      <div class="why-num">05</div>
+      <h3 class="why-title">Fast Turnaround</h3>
+      <p class="why-desc">10 days from onboarding to live content. We move fast without cutting corners. You'll see your brand come alive before most agencies finish their discovery call.</p>
+      <div class="why-icon">⚡</div>
+    </div>
+    <div class="why-block reveal-up" style="transition-delay:.3s">
+      <div class="why-num">06</div>
+      <h3 class="why-title">True Partnership</h3>
+      <p class="why-desc">We're not vendors. We're invested partners. Your growth is our portfolio. We only take clients we believe in — which means we work harder than anyone else for you.</p>
+      <div class="why-icon">🤝</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ SECTION 4: RESULTS ══════════════ -->
+<section id="results">
+  <canvas id="results-bg-canvas"></canvas>
+  <div class="section-eyebrow" style="justify-content:center">The Numbers</div>
+  <h2 class="section-title" style="text-align:center">Results That<br>Speak <span class="accent">for Themselves</span></h2>
+  <div class="results-grid">
+    <div class="result-card reveal-up">
+      <span class="result-number" data-target="10">0<span class="accent"> Days</span></span>
+      <span class="result-label">Brand to Live Content</span>
+    </div>
+    <div class="result-card reveal-up" style="transition-delay:.1s">
+      <span class="result-number" data-target="30">0<span class="accent"> Days</span></span>
+      <span class="result-label">To First 10K Views</span>
+    </div>
+    <div class="result-card reveal-up" style="transition-delay:.2s">
+      <span class="result-number" data-target="3"><span class="accent">×</span>0</span>
+      <span class="result-label">Average Reach Increase</span>
+    </div>
+    <div class="result-card reveal-up" style="transition-delay:.3s">
+      <span class="result-number"><span class="accent">100%</span></span>
+      <span class="result-label">Done For You</span>
+    </div>
+  </div>
+</section>
+
+<div class="glass-divider"></div>
+
+<!-- ══════════════ SECTION 5: SERVICES ══════════════ -->
+<section id="services">
+  <canvas id="services-bg-canvas"></canvas>
+  <div class="section-eyebrow">Our Services</div>
+  <h2 class="section-title">What We<br><span class="accent">Deliver</span></h2>
+  <div class="services-grid">
+    <!-- Card 1 -->
+    <div class="service-card reveal-up">
+      <div class="service-icon">📡</div>
+      <div class="service-name">Content Production</div>
+      <p class="service-desc">Full-stack content creation. Scripts, shoots, edits, captions and scheduling — across all platforms.</p>
+      <ul class="service-features">
+        <li>Monthly video content</li>
+        <li>Short-form reels & clips</li>
+        <li>LinkedIn & Instagram posts</li>
+        <li>Engagement strategy</li>
+      </ul>
+      <div class="service-price">Custom <span>/ month</span></div>
+    </div>
+    <!-- Card 2: Featured -->
+    <div class="service-card featured reveal-up">
+      <div class="service-icon">👑</div>
+      <div class="service-name">Signature Brand Package</div>
+      <p class="service-desc">Your complete brand foundation — built once, built right. Everything you need to own your market.</p>
+      <ul class="service-features">
+        <li>Deep-dive brand strategy</li>
+        <li>Complete visual identity system</li>
+        <li>Messaging & positioning framework</li>
+        <li>90-day content roadmap</li>
+        <li>Brand handbook</li>
+        <li>One-on-one brand sessions</li>
+      </ul>
+      <div class="service-price">$2,400 <span>one time</span></div>
+    </div>
+    <!-- Card 3 -->
+    <div class="service-card reveal-up">
+      <div class="service-icon">📣</div>
+      <div class="service-name">Meta Ads</div>
+      <p class="service-desc">Authority-building paid campaigns. We create, manage and optimise ads that convert at premium scale.</p>
+      <ul class="service-features">
+        <li>Ad strategy & creative</li>
+        <li>Audience targeting</li>
+        <li>A/B testing framework</li>
+        <li>Weekly performance reports</li>
+      </ul>
+      <div class="service-price">Custom <span>/ month</span></div>
+    </div>
+  </div>
+</section>
+
+
+<!-------invest_2.0-------testing
+<section id="investment2">
+  <div class="section-eyebrow" style="justify-content:center">Investment</div>
+  <h2 class="section-title" style="text-align:center">Transparent.<br><span class="accent">No Surprises.</span></h2>
+  <p style="text-align:center;color:var(--muted);font-size:16px;max-width:500px;margin:0 auto;line-height:1.7">Premium output demands premium commitment. These packages are designed for founders ready to build something that lasts.</p>
+  <div class="investment-grid">
+    <div class="plan-card reveal-up">
+      <div class="plan-name">Signature Brand Package</div>
+      <div class="plan-price"><sub>$</sub>2,400</div>
+      <p class="plan-desc">Your entire brand foundation, delivered in 6 weeks. The launchpad every authority-building journey needs.</p>
+      <ul class="plan-features">
+        <li><span class="check">✦</span>Brand Strategy Document</li>
+        <li><span class="check">✦</span>Complete Visual Identity</li>
+        <li><span class="check">✦</span>Messaging Framework</li>
+        <li><span class="check">✦</span>90-Day Content Plan</li>
+        <li><span class="check">✦</span>Brand Handbook (60+ pages)</li>
+        <li><span class="check">✦</span>3 Brand Sessions (1:1)</li>
+      </ul>
+      <button class="plan-btn outline">Get Started</button>
+    </div>
+    <div class="plan-card reveal-up" style="transition-delay:.15s">
+      <div class="plan-name">Monthly Content Retainer</div>
+      <div class="plan-price" style="color:var(--accent)">Custom</div>
+      <p class="plan-desc">Full-production content partnership. We run your brand presence so you can run your business.</p>
+      <ul class="plan-features">
+        <li><span class="check">✦</span>Monthly Production Days</li>
+        <li><span class="check">✦</span>Scripts & Storyboards</li>
+        <li><span class="check">✦</span>Premium Editing Suite</li>
+        <li><span class="check">✦</span>Multi-Platform Scheduling</li>
+        <li><span class="check">✦</span>Strategy Reviews (Monthly)</li>
+        <li><span class="check">✦</span>Performance Analytics</li>
+      </ul>
+      <button class="plan-btn filled">Book a Call</button>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- ══════════════ SECTION 8: PROCESS ══════════════ -->
+<section id="process">
+  <div class="section-eyebrow">Our Process</div>
+  <h2 class="section-title">From Zero to<br>Live in <span class="accent">10 days</span></h2>
+  <p style="color:var(--muted);font-size:16px;max-width:500px;line-height:1.7;margin-top:16px">A proven system. Six weeks of focused work that transforms your brand from invisible to unmissable.</p>
+  <div class="timeline">
+    <div class="timeline-fill" id="timeline-fill"></div>
+    <div class="timeline-item reveal-up">
+      <div class="timeline-dot"></div>
+      <div class="timeline-week">Day 1</div>
+      <div class="timeline-content">
+        <h3>Onboarding</h3>
+        <p>Contracts signed. Brand questionnaire completed. Access shared. Production calendar set. We hit the ground running.</p>
+      </div>
+    </div>
+    <div class="timeline-item reveal-up">
+      <div class="timeline-dot"></div>
+      <div class="timeline-week">Day 2-4</div>
+      <div class="timeline-content">
+        <h3>Discovery</h3>
+        <p>Deep-dive brand session. Audience research. Competitive landscape analysis. We surface what makes you genuinely different.</p>
+      </div>
+    </div>
+    <div class="timeline-item reveal-up">
+      <div class="timeline-dot"></div>
+      <div class="timeline-week">Day 5-6</div>
+      <div class="timeline-content">
+        <h3>Visual Identity</h3>
+        <p>Logo. Color system. Typography. Photography direction. Your visual world, built to be immediately recognisable.</p>
+      </div>
+    </div>
+    <div class="timeline-item reveal-up">
+      <div class="timeline-dot"></div>
+      <div class="timeline-week">Day 7-8</div>
+      <div class="timeline-content">
+        <h3>Messaging</h3>
+        <p>Positioning statement. Brand voice. Core messages. Your story, crystallised into language that lands.</p>
+      </div>
+    </div>
+    <div class="timeline-item reveal-up">
+      <div class="timeline-dot"></div>
+      <div class="timeline-week">Day 9</div>
+      <div class="timeline-content">
+        <h3>Content</h3>
+        <p>First production day. Scripts approved. Content captured and edited. Your 90-day calendar fully mapped.</p>
+      </div>
+    </div>
+    <div class="timeline-item reveal-up">
+      <div class="timeline-dot"></div>
+      <div class="timeline-week">Day 10</div>
+      <div class="timeline-content">
+        <h3>Launch 🚀</h3>
+        <p>Brand goes live. Content starts publishing. Momentum begins. You step into your authority — fully supported.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="glass-divider"></div>
+
+<!-- ══════════════ SECTION 9: CLIENTS ══════════════ -->
+<section id="clients">
+  <div class="section-eyebrow">Who We Work With</div>
+  <h2 class="section-title">Built for the<br><span class="accent">Best in Every Field</span></h2>
+  <div class="clients-grid">
+    <div class="client-card reveal-up">
+      <div class="client-icon">⚕️</div>
+      <div class="client-name">Doctors</div>
+      <div class="client-tagline">Medical thought leaders</div>
+      <div class="client-result">
+        <div class="client-result-num">5.2M</div>
+        <div class="client-result-label">Total views in first 90 days for a surgical specialist</div>
+      </div>
+    </div>
+    <div class="client-card reveal-up" style="transition-delay:.05s">
+      <div class="client-icon">💼</div>
+      <div class="client-name">Consultants</div>
+      <div class="client-tagline">High-value advisors</div>
+      <div class="client-result">
+        <div class="client-result-num">4×</div>
+        <div class="client-result-label">Inbound leads increase within 6 weeks of launch</div>
+      </div>
+    </div>
+    <div class="client-card reveal-up" style="transition-delay:.1s">
+      <div class="client-icon">🚀</div>
+      <div class="client-name">Founders</div>
+      <div class="client-tagline">Startup & SME leaders</div>
+      <div class="client-result">
+        <div class="client-result-num">82K</div>
+        <div class="client-result-label">LinkedIn followers built from zero in under one year</div>
+      </div>
+    </div>
+    <div class="client-card reveal-up" style="transition-delay:.15s">
+      <div class="client-icon">🎓</div>
+      <div class="client-name">Educators</div>
+      <div class="client-tagline">Course creators & coaches</div>
+      <div class="client-result">
+        <div class="client-result-num">$240K</div>
+        <div class="client-result-label">Course revenue in first launch month</div>
+      </div>
+    </div>
+    <div class="client-card reveal-up" style="transition-delay:.2s">
+      <div class="client-icon">⚖️</div>
+      <div class="client-name">Lawyers</div>
+      <div class="client-tagline">Legal professionals</div>
+      <div class="client-result">
+        <div class="client-result-num">3×</div>
+        <div class="client-result-label">Premium client acquisition rate after brand launch</div>
+      </div>
+    </div>
+    <div class="client-card reveal-up" style="transition-delay:.25s">
+      <div class="client-icon">🌿</div>
+      <div class="client-name">Wellness Experts</div>
+      <div class="client-tagline">Health & lifestyle brands</div>
+      <div class="client-result">
+        <div class="client-result-num">180K</div>
+        <div class="client-result-label">Combined social following built across platforms</div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ══════════════ SECTION 6: INVESTMENT ══════════════ -->
+<section id="investment">
+  <div class="section-eyebrow" style="justify-content:center">Investment</div>
+  <h2 class="section-title" style="text-align:center">Transparent.<br><span class="accent">No Surprises.</span></h2>
+  <p style="text-align:center;color:var(--muted);font-size:16px;max-width:500px;margin:0 auto;line-height:1.7">Premium output demands premium commitment. These packages are designed for founders ready to build something that lasts.</p>
+  <div class="investment-grid">
+    <div class="plan-card reveal-up">
+      <div class="plan-name"><B>GROW</B></div>
+      <div class="plan-price"><sub>$</sub>2,245</div>
+      <p class="plan-desc">Your entire brand foundation, delivered in 10 days. The launchpad every authority-building journey needs.</p>
+      <ul class="plan-features">
+        <li><span class="check">✦</span>15 Shorts / mo</li>
+        <li><span class="check">✦</span>Onboarding & review calls</li>
+        <li><span class="check">✦</span> Research & scripting</li>
+        <li><span class="check">✦</span>Editing & uploading</li>
+        <li><span class="check">✦</span> 7 sales-focused Instagram Stories</li>
+        <li><span class="check">✦</span>24/7 weekday email support (60+ pages)</li>
+        <li><span class="check">✦</span> Monthly performance report</li>
+      </ul>
+      <button class="plan-btn outline"><a href="https://calendly.com/offical-brandmeup/new-meeting"target="_blank">Book a Call</a></button>
+    </div>
+<div class="plan-card reveal-up">
+      <div class="plan-name">Scale</div>
+      <div class="plan-price" style="color:var(--accent)"><sub>$</sub>2,625</div>
+      <p class="plan-desc">Your entire brand foundation, delivered in 10 days. The launchpad every authority-building journey needs.</p>
+      <ul class="plan-features">
+        <li><span class="check">✦</span>20 Shorts / mo</li>
+        <li><span class="check">✦</span>Onboarding & review calls</li>
+        <li><span class="check">✦</span> Research & scripting</li>
+        <li><span class="check">✦</span>Editing & uploading</li>
+        <li><span class="check">✦</span> 10 sales-focused Instagram Stories</li>
+        <li><span class="check">✦</span>24/7 weekday email support (60+ pages)</li>
+        <li><span class="check">✦</span>Monthly performance report</li>
+      </ul>
+      <button class="plan-btn outline"><a href="https://calendly.com/offical-brandmeup/new-meeting"target="_blank">Book a Call</a></button>
+    </div>
+
+    <div class="plan-card reveal-up">
+      <div class="plan-name">Dominate</div>
+      <div class="plan-price" ><sub>$</sub>3,375</div>
+      <p class="plan-desc">Full-production content partnership. We run your brand presence so you can run your business.</p>
+      <ul class="plan-features"><br>
+        <li><span class="check">✦</span>30 Shorts / mo</li>
+        <li><span class="check">✦</span>Onboarding & review calls</li>
+        <li><span class="check">✦</span> Research & scripting</li>
+        <li><span class="check">✦</span>Editing & uploading</li>
+        <li><span class="check">✦</span> 15 sales-focused Instagram Stories</li>
+        <li><span class="check">✦</span>24/7 weekday email support (60+ pages)</li>
+        <li><span class="check">✦</span>Monthly performance report</li>
+      </ul>
+      <button class="plan-btn filled"><a href="https://calendly.com/offical-brandmeup/new-meeting"target="_blank">Book a Call</a></button>
+    </div>
+  </div>
+</section>
+<!-- ══════════════ SECTION 7: CTA ══════════════ -->
+<section id="cta-section">
+  <canvas id="particles-canvas"></canvas>
+  <span class="arrow-up">↑</span>
+  <h2 class="cta-title">
+    Ready to Build<br>
+    <span class="line2">Your Brand?</span>
+  </h2>
+  <p style="font-size:16px;color:var(--muted);max-width:480px;text-align:center;line-height:1.7;margin-bottom:48px;position:relative;z-index:2">
+    30/45-minutes strategy call. No commitment. No fluff. Just clarity on what your brand could become.
+  </p>
+  <button class="cta-btn-large"><a href="https://calendly.com/offical-brandmeup/new-meeting"target="_blank">Book Your Strategy Call</a></button>
+</section>
+<!-- ══════════════ FOOTER ══════════════ -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="logo">Brand<span>Me</span>Up</div>
+      <p>We build personal brands for the people who deserve to be known. Research-led. Production-heavy. Results-obsessed.</p>
+    </div>
+    <div style="display:flex;gap:80px;flex-wrap:wrap">
+      <div class="footer-links">
+        <h4>Services</h4>
+        <a href="#services">Signature Brand Package</a>
+        <a href="#services">Content Production</a>
+        <a href="#services">Meta Ads</a>
+        <a href="#investment">Pricing</a>
+      </div>
+      <div class="footer-links">
+        <h4>Company</h4>
+        <a href="#process">Our Process</a>
+        <a href="#why-us">Why Us</a>
+        <a href="#clients">Clients</a>
+      </div>
+      <div class="footer-links">
+        <h4>Connect</h4>
+        <a href="mailto:official.brandmeup@gmail.com"target="_blank">official.brandmeup@gmail.com</a>
+        <a href="https://instagram.com/brandmeupagency"target="_blank">Instagram</a>
+        <a href="#">LinkedIn</a>
+        <a href="https://calendly.com/offical-brandmeup/new-meeting"target="_blank">Book a Call</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 BrandMeUp. All rights reserved.</span>
+    <span style="color:var(--muted)">Crafted with intention.</span>
+  </div>
+</footer>
+
+<script>
+// ── GSAP + ScrollTrigger setup
+gsap.registerPlugin(ScrollTrigger);
+
+// ── Cursor
+const cursor = document.getElementById('cursor');
+const cursorTrail = document.getElementById('cursor-trail');
+let mx=0,my=0,tx=0,ty=0;
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX;my=e.clientY;
+  cursor.style.left=mx+'px';cursor.style.top=my+'px';
+});
+function animCursor(){
+  tx+=(mx-tx)*.12;ty+=(my-ty)*.12;
+  cursorTrail.style.left=tx+'px';cursorTrail.style.top=ty+'px';
+  requestAnimationFrame(animCursor);
+}animCursor();
+
+// ── Progress Bar
+window.addEventListener('scroll',()=>{
+  const p=window.scrollY/(document.body.scrollHeight-window.innerHeight)*100;
+  document.getElementById('progress-bar').style.width=p+'%';
+  const nav=document.getElementById('nav');
+  nav.classList.toggle('scrolled',window.scrollY>50);
+  document.getElementById('scroll-indicator').classList.toggle('visible',window.scrollY>200);
+});
+
+// ── LOADER ANIMATION
+window.addEventListener('load',()=>{
+const letters = document.querySelectorAll('.loader-letter');
+  const tl=gsap.timeline({onComplete:()=>{
+    gsap.to('#loader',{opacity:0,duration:.8,delay:.3,onComplete:()=>{
+      document.getElementById('loader').style.display='none';
+      playHeroAnimations();
+    }});
+  }});
+  // Letters rain in
+  tl.to(letters,{
+    opacity:1,y:0,rotateX:0,duration:.6,stagger:.05,ease:'back.out(2)'
+  });
+  // Accent the U
+  tl.to('#loader-u',{color:'#C8FF4D',scale:1.2,duration:.4},'-=.1');
+  // U stretches down
+  tl.to('#loader-u',{scaleY:1.8,transformOrigin:'top center',duration:.5,ease:'power2.inOut'},'>');
+  // Arrow appears
+  tl.to('#arrow-container',{opacity:1,duration:.3},'<.2');
+  // Everything morphs upward
+  tl.to(['#loader-u','#arrow-container'],{y:-30,duration:.4,ease:'power2.out'},'>');
+  // Tagline
+  tl.to('#loader-tagline',{opacity:1,y:0,duration:.4},'<');
+  // Hold then exit
+  tl.to({},{duration:.8});
+});
+
+function playHeroAnimations(){
+  const tl=gsap.timeline();
+  tl.to('.hero-eyebrow',{opacity:1,y:0,duration:.8,ease:'power3.out'});
+  tl.to('.hero-headline .line span',{
+    opacity:1,y:0,duration:.9,stagger:.15,ease:'power3.out'
+  },'<.2');
+  tl.to('.hero-sub',{opacity:1,y:0,duration:.8,ease:'power3.out'},'<.3');
+  tl.to('.hero-actions',{opacity:1,y:0,duration:.8,ease:'power3.out'},'<.2');
+  tl.from('#hero-visual',{opacity:0,scale:.8,duration:1.2,ease:'power3.out'},'<.2');
+}
+
+// ── HORIZONTAL SCROLL — PROBLEM SECTION
+// Root fix: end:'bottom bottom' ensures the sticky pin holds
+// for the ENTIRE height of #problem-wrapper (500vh).
+// The pin only releases after the wrapper's bottom edge
+// has scrolled completely past the viewport bottom —
+// meaning all 5 panels are fully shown before Solution appears.
+(function(){
+  const problemTrack = document.getElementById('problem-track');
+  const problemWrapper = document.getElementById('problem-wrapper');
+  if(!problemTrack || !problemWrapper) return;
+
+  const isMobileProb = () => window.innerWidth <= 768;
+  if(isMobileProb()) return; // vertical on mobile, no GSAP needed
+
+  gsap.to(problemTrack, {
+    // Translate exactly (N-1) × 100vw to the left — each step reveals one panel
+    x: () => -(problemTrack.scrollWidth - window.innerWidth),
+    ease: 'none',
+    scrollTrigger: {
+      trigger: '#problem-wrapper',
+      start: 'top top',
+      // end at 'bottom bottom': pin holds until wrapper bottom = viewport bottom
+      // This means all 500vh of scroll budget is consumed before unpinning
+      end: 'bottom bottom',
+      scrub: 1,
+      pin: '#problem-sticky',
+      pinSpacing: false,   // wrapper already provides the scroll distance
+      anticipatePin: 1,
+      invalidateOnRefresh: true,
+    }
+  });
+
+  // Re-init on resize
+  ScrollTrigger.addEventListener('refreshInit', () => {
+    if(isMobileProb()){
+      ScrollTrigger.getAll()
+        .filter(t => t.trigger === problemWrapper)
+        .forEach(t => t.kill());
+      gsap.set(problemTrack, {x:0});
+    }
+  });
+})();
+
+// ── PER-PANEL CANVAS ANIMATIONS (Problem Section)
+// Each panel gets a unique thematic animation tied to its problem.
+(function(){
+  // Panel 0 — Intro: slow particle drift (ambient wonder)
+  (function(){
+    const c = document.getElementById('prob-canvas-0');
+    if(!c) return;
+    const ctx = c.getContext('2d');
+    let pts = [], W, H;
+    function resize(){ W=c.width=c.offsetWidth; H=c.height=c.offsetHeight; init(); }
+    function init(){
+      pts = Array.from({length:60}, () => ({
+        x: Math.random()*W, y: Math.random()*H,
+        vx: (Math.random()-.5)*.3, vy: (Math.random()-.5)*.3,
+        r: Math.random()*2+.5, o: Math.random()*.25+.05
+      }));
+    }
+    function draw(){
+      ctx.clearRect(0,0,W,H);
+      pts.forEach(p => {
+        p.x+=p.vx; p.y+=p.vy;
+        if(p.x<0||p.x>W) p.vx*=-1;
+        if(p.y<0||p.y>H) p.vy*=-1;
+        ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+        ctx.fillStyle=`rgba(200,255,77,${p.o})`; ctx.fill();
+      });
+      // faint connections
+      for(let i=0;i<pts.length;i++) for(let j=i+1;j<pts.length;j++){
+        const dx=pts[i].x-pts[j].x, dy=pts[i].y-pts[j].y;
+        const d=Math.sqrt(dx*dx+dy*dy);
+        if(d<110){ ctx.beginPath(); ctx.moveTo(pts[i].x,pts[i].y); ctx.lineTo(pts[j].x,pts[j].y);
+          ctx.strokeStyle=`rgba(200,255,77,${.07*(1-d/110)})`; ctx.lineWidth=.5; ctx.stroke(); }
+      }
+      requestAnimationFrame(draw);
+    }
+    resize(); window.addEventListener('resize', resize); draw();
+  })();
+
+  // Panel 1 — No Time: clock hands spinning frantically
+  (function(){
+    const c = document.getElementById('prob-canvas-1');
+    if(!c) return;
+    const ctx = c.getContext('2d');
+    let W, H, t=0;
+    function resize(){ W=c.width=c.offsetWidth; H=c.height=c.offsetHeight; }
+    function draw(){
+      ctx.clearRect(0,0,W,H);
+      t += 0.018;
+      const clocks = [
+        {x:W*.18,y:H*.25,r:55,speed:3.5},
+        {x:W*.72,y:H*.55,r:40,speed:5.2},
+        {x:W*.85,y:H*.2, r:28,speed:7},
+        {x:W*.12,y:H*.72,r:35,speed:4},
+        {x:W*.5, y:H*.82,r:22,speed:8},
+        {x:W*.62,y:H*.15,r:18,speed:10},
+        {x:W*.35,y:H*.45,r:48,speed:2.8},
+      ];
+      clocks.forEach(cl => {
+        // clock face
+        ctx.beginPath(); ctx.arc(cl.x,cl.y,cl.r,0,Math.PI*2);
+        ctx.strokeStyle='rgba(200,255,77,.1)'; ctx.lineWidth=1; ctx.stroke();
+        // hour hand
+        const ha = t*cl.speed*.25 - Math.PI/2;
+        ctx.beginPath(); ctx.moveTo(cl.x,cl.y);
+        ctx.lineTo(cl.x+Math.cos(ha)*cl.r*.55, cl.y+Math.sin(ha)*cl.r*.55);
+        ctx.strokeStyle='rgba(200,255,77,.28)'; ctx.lineWidth=1.5; ctx.stroke();
+        // minute hand (faster)
+        const ma = t*cl.speed - Math.PI/2;
+        ctx.beginPath(); ctx.moveTo(cl.x,cl.y);
+        ctx.lineTo(cl.x+Math.cos(ma)*cl.r*.8, cl.y+Math.sin(ma)*cl.r*.8);
+        ctx.strokeStyle='rgba(200,255,77,.18)'; ctx.lineWidth=1; ctx.stroke();
+        // center dot
+        ctx.beginPath(); ctx.arc(cl.x,cl.y,2,0,Math.PI*2);
+        ctx.fillStyle='rgba(200,255,77,.4)'; ctx.fill();
+      });
+      requestAnimationFrame(draw);
+    }
+    resize(); window.addEventListener('resize', resize); draw();
+  })();
+
+  // Panel 2 — Don't Know What to Say: random words fading in/out
+  (function(){
+    const c = document.getElementById('prob-canvas-2');
+    if(!c) return;
+    const ctx = c.getContext('2d');
+    let W, H;
+    const words = ['Strategy?','Content?','Value?','Niche?','Voice?','Story?','Hook?','Why?','What?','How?','Who?','Format?'];
+    let wordObjs = [];
+    function resize(){ W=c.width=c.offsetWidth; H=c.height=c.offsetHeight; initWords(); }
+    function initWords(){
+      wordObjs = words.map(w => ({
+        text: w,
+        x: Math.random()*W,
+        y: Math.random()*H,
+        o: Math.random(),
+        speed: Math.random()*.008+.003,
+        phase: Math.random()*Math.PI*2,
+        size: Math.floor(Math.random()*14)+10
+      }));
+    }
+    let t=0;
+    function draw(){
+      ctx.clearRect(0,0,W,H); t+=.016;
+      wordObjs.forEach(w => {
+        w.o = .05 + .2*Math.abs(Math.sin(t*w.speed*40+w.phase));
+        ctx.font=`${w.size}px Inter,sans-serif`;
+        ctx.fillStyle=`rgba(200,255,77,${w.o})`;
+        ctx.fillText(w.text, w.x, w.y);
+      });
+      requestAnimationFrame(draw);
+    }
+    resize(); window.addEventListener('resize', resize); draw();
+  })();
+
+  // Panel 3 — Expensive: falling coin/dollar streams
+  (function(){
+    const c = document.getElementById('prob-canvas-3');
+    if(!c) return;
+    const ctx = c.getContext('2d');
+    let W, H;
+    let coins = [];
+    function resize(){ W=c.width=c.offsetWidth; H=c.height=c.offsetHeight; initCoins(); }
+    function initCoins(){
+      coins = Array.from({length:35}, () => ({
+        x: Math.random()*W,
+        y: Math.random()*H - H,
+        speed: Math.random()*1.5+.5,
+        r: Math.random()*8+4,
+        o: Math.random()*.3+.05,
+        wobble: Math.random()*Math.PI*2,
+        wobbleSpeed: Math.random()*.04+.01
+      }));
+    }
+    function draw(){
+      ctx.clearRect(0,0,W,H);
+      coins.forEach(coin => {
+        coin.y += coin.speed;
+        coin.wobble += coin.wobbleSpeed;
+        if(coin.y > H+20){ coin.y=-20; coin.x=Math.random()*W; }
+        const ex = coin.r*Math.abs(Math.cos(coin.wobble)); // ellipse x-radius (coin spin)
+        ctx.beginPath();
+        ctx.ellipse(coin.x, coin.y, ex, coin.r, 0, 0, Math.PI*2);
+        ctx.strokeStyle=`rgba(200,255,77,${coin.o})`;
+        ctx.lineWidth=1; ctx.stroke();
+        // dollar sign in center when coin is "facing"
+        if(ex > coin.r*.5){
+          ctx.font=`bold ${Math.floor(coin.r)}px sans-serif`;
+          ctx.fillStyle=`rgba(200,255,77,${coin.o*.8})`;
+          ctx.textAlign='center'; ctx.textBaseline='middle';
+          ctx.fillText('$', coin.x, coin.y);
+          ctx.textAlign='start'; ctx.textBaseline='alphabetic';
+        }
+      });
+      requestAnimationFrame(draw);
+    }
+    resize(); window.addEventListener('resize', resize); draw();
+  })();
+
+  // Panel 4 — No Strategy: flat/declining chart lines
+  (function(){
+    const c = document.getElementById('prob-canvas-4');
+    if(!c) return;
+    const ctx = c.getContext('2d');
+    let W, H, t=0;
+    let lines = [];
+    function resize(){ W=c.width=c.offsetWidth; H=c.height=c.offsetHeight; initLines(); }
+    function initLines(){
+      lines = Array.from({length:7}, (_,i) => ({
+        yBase: H*.2 + i*(H*.08),
+        noiseScale: Math.random()*.04+.01,
+        noiseOffset: Math.random()*100,
+        alpha: .06 + i*.02,
+        // Each line trends slightly downward (erratic, no growth)
+        trendSlope: Math.random()*.0003+.0001,
+      }));
+    }
+    // Simple noise
+    function noise(x){ return Math.sin(x*.7)*Math.cos(x*.3)*Math.sin(x*.11); }
+    function draw(){
+      ctx.clearRect(0,0,W,H); t+=.012;
+      lines.forEach(line => {
+        ctx.beginPath();
+        for(let x=0; x<=W; x+=3){
+          const prog = x/W;
+          // trend: starts mid, drifts down erratically
+          const trend = line.yBase + prog*H*.18;
+          const n = noise(x*line.noiseScale+line.noiseOffset+t)*H*.06;
+          const y = trend + n;
+          x===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
+        }
+        ctx.strokeStyle=`rgba(200,255,77,${line.alpha})`;
+        ctx.lineWidth=1.2; ctx.stroke();
+      });
+      // Red-ish downward arrow ghost
+      const ax=W*.75, ay=H*.35;
+      ctx.beginPath();
+      ctx.moveTo(ax, ay); ctx.lineTo(ax+W*.12, ay+H*.2);
+      ctx.strokeStyle='rgba(255,80,80,.08)'; ctx.lineWidth=2; ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(ax+W*.12, ay+H*.2);
+      ctx.lineTo(ax+W*.08, ay+H*.12);
+      ctx.moveTo(ax+W*.12, ay+H*.2);
+      ctx.lineTo(ax+W*.16, ay+H*.12);
+      ctx.stroke();
+      requestAnimationFrame(draw);
+    }
+    resize(); window.addEventListener('resize', resize); draw();
+  })();
+})();
+
+// ════════════════════════════════════════════
+// SOLUTION SECTION — SCROLL-DRIVEN PIPELINE
+// Architecture:
+//   1. Measure the right column's content height.
+//   2. Set scroll-outer height = content height + viewport height
+//      (gives us scroll distance equal to stage track height)
+//   3. Use GSAP scrub to translate the track upward as user scrolls,
+//      keeping the sticky container at 100vh.
+//   4. Determine active stage from scroll progress. Update display card.
+//   5. On mobile (≤1024px): disable GSAP, show all stages at full opacity.
+// ════════════════════════════════════════════
+
+const STAGE_DATA=[
+  {
+    badge:'Research',
+    title:'DEEP ANALYSIS',
+    content:'📊 Competitive landscape mapped.\n\nWe study the social media trend of your profession  that can excuslively suit you well. Research for you makes you ahead of your competitors🚀'
+  },
+  {
+    badge:'Scripting',
+    title:'FINDING YOUR VOICE',
+    content:'✍️ Crafting your narrative...\n\n"Most people think expertise is enough.\nIt\'s not. Visibility is.\nAnd visibility without strategy is just noise."\n\n↗ Your first scroll-stopping hook.'
+  },
+  {
+    badge:'Production',
+    title:'LIGHTS · CAMERA',
+    content:'🎬 Camera: SONY FX6\nLens: 35mm f/1.4\nRig: 3-point cinema lighting\nStudio: Brand-aligned location\n\nRolling in 3 · 2 · 1 ·'
+  },
+  {
+    badge:'Post-Production',
+    title:'CRAFTING THE CUT',
+    content:'🎞️ 12 clips on the timeline\nColor grade: Warm cinematic\nCaptions: Burnt in\nFormats: 9:16 · 1:1 · 16:9\n\nExporting final masters...'
+  },
+  {
+    badge:'Upload & Grow',
+    title:'YOU\'RE LIVE',
+    content:'🚀 Published across platforms:\n↗ LinkedIn    — 11:00 AM\n↗ Instagram  — 12:30 PM\n↗ YouTube    — 2:00 PM\n\n✦ 847 views in the first hour.'
+  }
+];
+
+function initSolutionSection(){
+  const outer=document.getElementById('pipeline-scroll-outer');
+  const sticky=document.getElementById('pipeline-sticky-container');
+  const track=document.getElementById('pipeline-stages-track');
+  const right=document.getElementById('pipeline-right');
+  const stages=[...document.querySelectorAll('.pipeline-stage')];
+  const displayContent=document.getElementById('display-content');
+  const displayTitle=document.getElementById('display-title');
+  const displayBadge=document.getElementById('display-badge-text');
+  const dots=[...document.querySelectorAll('.display-dot')];
+  if(!outer||!sticky||!track||!right||!stages.length)return;
+
+  const isMobile=()=>window.innerWidth<=1024;
+
+  // Active stage updater
+  let currentStage=-1;
+  function setStage(idx){
+    if(idx===currentStage)return;
+    currentStage=idx;
+    stages.forEach((s,i)=>{
+      s.classList.toggle('active',i===idx);
+    });
+    dots.forEach((d,i)=>{
+      d.classList.toggle('current',i===idx);
+      d.classList.toggle('done',i<idx);
+      d.classList.remove('done'); // reset first
+    });
+    // Redo done dots properly
+    dots.forEach((d,i)=>{
+      d.classList.remove('current','done');
+      if(i<idx) d.classList.add('done');
+      if(i===idx) d.classList.add('current');
+    });
+    const data=STAGE_DATA[idx];
+    if(!data)return;
+    if(displayBadge) displayBadge.textContent=data.badge;
+    if(displayTitle){
+      displayTitle.style.opacity='0';
+      setTimeout(()=>{
+        displayTitle.textContent=data.title;
+        displayTitle.style.opacity='1';
+        displayTitle.style.transition='opacity .3s';
+      },150);
+    }
+    if(displayContent){
+      displayContent.style.opacity='0';
+      displayContent.style.transform='translateY(10px)';
+      setTimeout(()=>{
+        displayContent.textContent=data.content;
+        displayContent.style.opacity='1';
+        displayContent.style.transform='translateY(0)';
+        displayContent.style.transition='opacity .4s,transform .4s';
+      },200);
+    }
+  }
+  setStage(0);
+
+  // Mobile: no GSAP pinning needed, just observe stages
+  if(isMobile()){
+    outer.style.height='auto';
+    const obs=new IntersectionObserver(entries=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting){
+          const idx=parseInt(e.target.dataset.stage);
+          if(!isNaN(idx)) setStage(idx);
+        }
+      });
+    },{threshold:.5});
+    stages.forEach(s=>obs.observe(s));
+    return;
+  }
+
+  // Desktop: measure and set up GSAP scroll
+  function setup(){
+    if(isMobile()) return;
+    const stageCount=stages.length;
+    const vh=window.innerHeight;
+    const trackH=track.scrollHeight;
+    // We need to scroll the track by (trackH - rightColumnContentH) 
+    // where rightColumnContentH = visible area in right column = vh - padding
+    const rightPadV=60*2; // top + bottom padding on .pipeline-right
+    const visibleH=vh-rightPadV;
+    const scrollDistance=Math.max(0,trackH-visibleH);
+
+    // outer height = scroll distance + extra so we don't unpin early
+    outer.style.height=(vh+scrollDistance+vh*.5)+'px';
+
+    // Kill previous ScrollTrigger if re-init
+    ScrollTrigger.getAll().filter(t=>t.vars.id==='pipeline').forEach(t=>t.kill());
+
+    gsap.to(track,{
+      y:-scrollDistance,
+      ease:'none',
+      scrollTrigger:{
+        id:'pipeline',
+        trigger:outer,
+        start:'top top',
+        end:`+=${scrollDistance+vh*.5}`,
+        scrub:.8,
+        pin:sticky,
+        pinSpacing:false,
+        onUpdate:(self)=>{
+          const idx=Math.min(
+            stageCount-1,
+            Math.floor(self.progress*stageCount)
+          );
+          setStage(idx);
+        }
+      }
+    });
+  }
+
+  // Init after fonts/layout settle
+  requestAnimationFrame(()=>requestAnimationFrame(setup));
+
+  // Re-init on resize
+  let resizeTimer;
+  window.addEventListener('resize',()=>{
+    clearTimeout(resizeTimer);
+    resizeTimer=setTimeout(()=>{
+      ScrollTrigger.getAll().filter(t=>t.vars.id==='pipeline').forEach(t=>t.kill());
+      gsap.set(track,{y:0});
+      if(isMobile()){
+        outer.style.height='auto';
+        currentStage=-1;
+        setStage(0);
+      } else {
+        setup();
+      }
+    },200);
+  });
+}
+initSolutionSection();
+
+// ════════════════════════════════════════════
+// ANIMATED CANVAS BACKGROUNDS
+// Each section gets its own thematic animation.
+// All canvases are position:absolute behind content (z-index:0).
+// ════════════════════════════════════════════
+
+// ── Solution background: flowing horizontal data streams
+(function(){
+  const canvas=document.getElementById('solution-canvas');
+  if(!canvas) return;
+  const ctx=canvas.getContext('2d');
+  let W,H,streams=[];
+  function resize(){
+    W=canvas.width=canvas.offsetWidth;
+    H=canvas.height=canvas.offsetHeight;
+    initStreams();
+  }
+  function initStreams(){
+    streams=[];
+    const count=Math.floor(W/28);
+    for(let i=0;i<count;i++){
+      streams.push({
+        x:i*(W/count)+Math.random()*10,
+        y:Math.random()*H,
+        speed:Math.random()*1.2+.3,
+        length:Math.floor(Math.random()*18)+6,
+        chars:[],
+        opacity:Math.random()*.3+.05,
+        color:Math.random()>.7?'200,255,77':'255,255,255'
+      });
+      // Fill char trail
+      for(let j=0;j<streams[i].length;j++){
+        streams[i].chars.push(Math.random()>.5?'1':'0');
+      }
+    }
+  }
+  let frame=0;
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    frame++;
+    streams.forEach(s=>{
+      s.y+=s.speed;
+      if(s.y>H+s.length*14) s.y=-s.length*14;
+      if(frame%8===0) s.chars.shift(),s.chars.push(Math.random()>.5?'1':'0');
+      s.chars.forEach((ch,j)=>{
+        const alpha=s.opacity*(1-j/s.length);
+        const size=j===0?11:10;
+        ctx.font=`${size}px monospace`;
+        ctx.fillStyle=`rgba(${s.color},${alpha})`;
+        ctx.fillText(ch,s.x,s.y-j*13);
+      });
+    });
+    requestAnimationFrame(draw);
+  }
+  resize();
+  window.addEventListener('resize',()=>{resize()});
+  draw();
+})();
+
+// ── Display card mini canvas: animated waveform / signal
+(function(){
+  const c=document.getElementById('display-canvas');
+  if(!c) return;
+  const ctx=c.getContext('2d');
+  let t=0;
+  function resize(){c.width=c.offsetWidth;c.height=c.offsetHeight}
+  function draw(){
+    const W=c.width,H=c.height;
+    ctx.clearRect(0,0,W,H);
+    ctx.beginPath();
+    for(let x=0;x<W;x++){
+      const y=H*.5+Math.sin((x/W)*Math.PI*4+t)*(H*.18)
+              +Math.sin((x/W)*Math.PI*8+t*1.3)*(H*.07);
+      x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+    }
+    const grad=ctx.createLinearGradient(0,0,W,0);
+    grad.addColorStop(0,'rgba(200,255,77,0)');
+    grad.addColorStop(.3,'rgba(200,255,77,.45)');
+    grad.addColorStop(.7,'rgba(200,255,77,.45)');
+    grad.addColorStop(1,'rgba(200,255,77,0)');
+    ctx.strokeStyle=grad;
+    ctx.lineWidth=1.5;
+    ctx.stroke();
+    t+=.025;
+    requestAnimationFrame(draw);
+  }
+  resize();
+  window.addEventListener('resize',resize);
+  draw();
+})();
+
+// ── REVEAL UP ANIMATIONS
+gsap.utils.toArray('.reveal-up').forEach(el=>{
+  gsap.to(el,{
+    opacity:1,y:0,duration:.8,ease:'power3.out',
+    scrollTrigger:{trigger:el,start:'top 85%'}
+  });
+});
+
+// ── COUNTER ANIMATION
+function animateCounter(el, target, isPrefix=false){
+  let start=0;
+  const duration=2000;
+  const startTime=performance.now();
+  const isDecimal=String(target).includes('.');
+  function tick(now){
+    const elapsed=now-startTime;
+    const progress=Math.min(elapsed/duration,1);
+    const eased=1-Math.pow(1-progress,3);
+    const current=Math.round(eased*target);
+    const inner=el.querySelector('.accent');
+    const accentHTML=inner?inner.outerHTML:'';
+    const accentBefore=el.innerHTML.startsWith('<span');
+    if(accentBefore){
+      el.innerHTML=accentHTML+current;
+    }else{
+      el.textContent=current;
+      if(inner) el.innerHTML=el.innerHTML+accentHTML;
+    }
+    if(progress<1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+document.querySelectorAll('.result-number[data-target]').forEach(el=>{
+  const target=parseInt(el.dataset.target);
+  ScrollTrigger.create({
+    trigger:el,start:'top 80%',once:true,
+    onEnter:()=>animateCounter(el,target)
+  });
+});
+
+// ── TIMELINE SCROLL FILL
+const timelineItems=document.querySelectorAll('.timeline-item');
+ScrollTrigger.create({
+  trigger:'.timeline',start:'top 70%',end:'bottom 70%',
+  scrub:1,
+  onUpdate:(self)=>{
+    const fill=document.getElementById('timeline-fill');
+    if(fill) fill.style.height=(self.progress*100)+'%';
+    timelineItems.forEach((item,i)=>{
+      const threshold=(i+1)/timelineItems.length;
+      item.classList.toggle('active',self.progress>=threshold-.1);
+    });
+  }
+});
+
+// ── PARTICLES CANVAS
+const canvas=document.getElementById('particles-canvas');
+if(canvas){
+  const ctx=canvas.getContext('2d');
+  function resizeCanvas(){canvas.width=canvas.offsetWidth;canvas.height=canvas.offsetHeight;}
+  resizeCanvas();
+  window.addEventListener('resize',resizeCanvas);
+  const pts=Array.from({length:120},()=>({
+    x:Math.random()*canvas.width,
+    y:Math.random()*canvas.height,
+    r:Math.random()*1.5+.5,
+    vx:(Math.random()-.5)*.4,
+    vy:(Math.random()-.5)*.4,
+    o:Math.random()*.5+.1
+  }));
+  function drawParticles(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    pts.forEach(p=>{
+      p.x+=p.vx;p.y+=p.vy;
+      if(p.x<0||p.x>canvas.width)p.vx*=-1;
+      if(p.y<0||p.y>canvas.height)p.vy*=-1;
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(200,255,77,${p.o})`;
+      ctx.fill();
+    });
+    // Draw connections
+    for(let i=0;i<pts.length;i++){
+      for(let j=i+1;j<pts.length;j++){
+        const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y;
+        const dist=Math.sqrt(dx*dx+dy*dy);
+        if(dist<100){
+          ctx.beginPath();
+          ctx.moveTo(pts[i].x,pts[i].y);
+          ctx.lineTo(pts[j].x,pts[j].y);
+          ctx.strokeStyle=`rgba(200,255,77,${.06*(1-dist/100)})`;
+          ctx.lineWidth=.5;ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(drawParticles);
+  }
+  drawParticles();
+}
+
+// ── Why Us background: drifting orb network (brain connections)
+(function(){
+  const c=document.getElementById('why-bg-canvas');
+  if(!c) return;
+  const ctx=c.getContext('2d');
+  let orbs=[];
+  function resize(){
+    c.width=c.offsetWidth;c.height=c.offsetHeight;
+    initOrbs();
+  }
+  function initOrbs(){
+    orbs=[];
+    const N=Math.floor(c.width*c.height/18000);
+    for(let i=0;i<N;i++){
+      orbs.push({
+        x:Math.random()*c.width,
+        y:Math.random()*c.height,
+        vx:(Math.random()-.5)*.25,
+        vy:(Math.random()-.5)*.25,
+        r:Math.random()*2+1,
+        o:Math.random()*.4+.1
+      });
+    }
+  }
+  function draw(){
+    const W=c.width,H=c.height;
+    ctx.clearRect(0,0,W,H);
+    // connections
+    for(let i=0;i<orbs.length;i++){
+      for(let j=i+1;j<orbs.length;j++){
+        const dx=orbs[i].x-orbs[j].x,dy=orbs[i].y-orbs[j].y;
+        const d=Math.sqrt(dx*dx+dy*dy);
+        if(d<130){
+          ctx.beginPath();
+          ctx.moveTo(orbs[i].x,orbs[i].y);
+          ctx.lineTo(orbs[j].x,orbs[j].y);
+          ctx.strokeStyle=`rgba(200,255,77,${.12*(1-d/130)})`;
+          ctx.lineWidth=.5;ctx.stroke();
+        }
+      }
+    }
+    // nodes
+    orbs.forEach(o=>{
+      o.x+=o.vx;o.y+=o.vy;
+      if(o.x<0||o.x>W)o.vx*=-1;
+      if(o.y<0||o.y>H)o.vy*=-1;
+      ctx.beginPath();
+      ctx.arc(o.x,o.y,o.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(200,255,77,${o.o})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+  resize();window.addEventListener('resize',resize);draw();
+})();
+
+// ── Results background: rising analytics bars
+(function(){
+  const c=document.getElementById('results-bg-canvas');
+  if(!c) return;
+  const ctx=c.getContext('2d');
+  let bars=[];
+  let t=0;
+  function resize(){
+    c.width=c.offsetWidth;c.height=c.offsetHeight;
+    initBars();
+  }
+  function initBars(){
+    bars=[];
+    const W=c.width,H=c.height;
+    const count=Math.floor(W/18);
+    for(let i=0;i<count;i++){
+      bars.push({
+        x:i*(W/count)+6,
+        baseH:Math.random()*H*.35+H*.05,
+        phase:Math.random()*Math.PI*2,
+        speed:Math.random()*.02+.008,
+        w:Math.random()*5+3,
+        color:Math.random()>.75?'200,255,77':'255,255,255'
+      });
+    }
+  }
+  function draw(){
+    const W=c.width,H=c.height;
+    ctx.clearRect(0,0,W,H);
+    t+=.016;
+    bars.forEach(b=>{
+      const h=b.baseH*(0.55+0.45*Math.sin(t*b.speed*40+b.phase));
+      const alpha=.08+.07*Math.sin(t*b.speed*30+b.phase);
+      const grad=ctx.createLinearGradient(b.x,H,b.x,H-h);
+      grad.addColorStop(0,`rgba(${b.color},${alpha*2})`);
+      grad.addColorStop(1,`rgba(${b.color},0)`);
+      ctx.fillStyle=grad;
+      ctx.fillRect(b.x,H-h,b.w,h);
+    });
+    requestAnimationFrame(draw);
+  }
+  resize();window.addEventListener('resize',resize);draw();
+})();
+
+// ── Services background: slow rotating geometric grid
+(function(){
+  const c=document.getElementById('services-bg-canvas');
+  if(!c) return;
+  const ctx=c.getContext('2d');
+  let t=0;
+  function resize(){c.width=c.offsetWidth;c.height=c.offsetHeight;}
+  function draw(){
+    const W=c.width,H=c.height;
+    ctx.clearRect(0,0,W,H);
+    t+=.003;
+    const cx=W/2,cy=H/2;
+    // Concentric rotating hex rings
+    for(let ring=1;ring<=6;ring++){
+      const r=ring*Math.min(W,H)*.085;
+      const sides=6;
+      const rotOffset=t*(ring%2===0?1:-1)*(.4/ring);
+      ctx.beginPath();
+      for(let s=0;s<=sides;s++){
+        const a=(s/sides)*Math.PI*2+rotOffset;
+        const px=cx+Math.cos(a)*r;
+        const py=cy+Math.sin(a)*r;
+        s===0?ctx.moveTo(px,py):ctx.lineTo(px,py);
+      }
+      ctx.strokeStyle=`rgba(200,255,77,${.04+.02*(6-ring)/6})`;
+      ctx.lineWidth=.7;ctx.stroke();
+    }
+    // Crosshair lines
+    const len=Math.min(W,H)*.55;
+    for(let a=0;a<6;a++){
+      const ang=a*(Math.PI/3)+t*.15;
+      ctx.beginPath();
+      ctx.moveTo(cx,cy);
+      ctx.lineTo(cx+Math.cos(ang)*len,cy+Math.sin(ang)*len);
+      ctx.strokeStyle='rgba(200,255,77,.03)';
+      ctx.lineWidth=1;ctx.stroke();
+    }
+    requestAnimationFrame(draw);
+  }
+  resize();window.addEventListener('resize',resize);draw();
+})();
+const sections=['hero','problem-wrapper','solution','results','services','cta-section'];
+const dots=document.querySelectorAll('.scroll-dot');
+window.addEventListener('scroll',()=>{
+  sections.forEach((id,i)=>{
+    const el=document.getElementById(id);
+    if(!el||!dots[i])return;
+    const rect=el.getBoundingClientRect();
+    dots[i].classList.toggle('active',rect.top<=window.innerHeight/2&&rect.bottom>=window.innerHeight/2);
+  });
+},{passive:true});
+
+// ── MAGNETIC BUTTONS
+document.querySelectorAll(
+'.btn-primary,.btn-secondary,.nav-cta,.cta-btn-large,.plan-btn'
+).forEach(btn=>{
+  btn.addEventListener('mousemove',e=>{
+    const r=btn.getBoundingClientRect();
+    const x=(e.clientX-r.left-r.width/2)*.25;
+    const y=(e.clientY-r.top-r.height/2)*.25;
+    btn.style.transform=`translate(${x}px,${y}px)`;
+  });
+  btn.addEventListener('mouseleave',()=>{
+    btn.style.transform='';
+  });
+});
+
+// ── PARALLAX HERO
+window.addEventListener('scroll',()=>{
+  const hero=document.getElementById('hero');
+  if(!hero)return;
+  const scroll=window.scrollY;
+  const heroContent=hero.querySelector('.hero-content');
+  if(heroContent) heroContent.style.transform=`translateY(${scroll*.3}px)`;
+  const heroVisual=document.getElementById('hero-visual');
+  if(heroVisual) heroVisual.style.transform=`translateY(${scroll*.15}px)`;
+},{passive:true});
+
+// ── TILT EFFECT ON SERVICE CARDS
+document.querySelectorAll('.service-card').forEach(card=>{
+  card.addEventListener('mousemove',e=>{
+    const r=card.getBoundingClientRect();
+    const x=(e.clientX-r.left)/r.width-.5;
+    const y=(e.clientY-r.top)/r.height-.5;
+    card.style.transform=`translateY(-8px) scale(1.02) perspective(800px) rotateY(${x*8}deg) rotateX(${y*-8}deg)`;
+  });
+  card.addEventListener('mouseleave',()=>{card.style.transform='';});
+});
+
+// ── GSAP ScrollTrigger section title animations
+gsap.utils.toArray('.section-title').forEach(el=>{
+  gsap.from(el,{
+    opacity:0,y:40,duration:1,ease:'power3.out',
+    scrollTrigger:{trigger:el,start:'top 85%'}
+  });
+});
+gsap.utils.toArray('.section-eyebrow').forEach(el=>{
+  gsap.from(el,{
+    opacity:0,x:-20,duration:.8,ease:'power3.out',
+    scrollTrigger:{trigger:el,start:'top 90%'}
+  });
+});
+
+// ── WHY BLOCKS stagger
+gsap.utils.toArray('.why-block').forEach((block,i)=>{
+  gsap.from(block,{
+    opacity:0,y:50,duration:.8,delay:i*.08,ease:'power3.out',
+    scrollTrigger:{trigger:'#why-us .why-grid',start:'top 80%'}
+  });
+});
+
+// ── RESULT CARDS stagger 
+gsap.utils.toArray('.result-card').forEach((card,i)=>{
+  gsap.from(card,{
+    opacity:0,y:40,scale:.96,duration:.8,delay:i*.1,ease:'power3.out',
+    scrollTrigger:{trigger:'#results .results-grid',start:'top 80%'}
+  });
+});
+</script>
+</body>
+</html>
