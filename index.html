@@ -260,121 +260,170 @@
     that breaks position:sticky on children.
     The clip is handled by #problem-sticky's overflow:hidden.
   */
-  #problem-wrapper{
-    /* 5 panels × 100vh = 500vh scroll budget */
-    height:500vh;
+/* ===========================
+   BMU PROBLEM SECTION V2
+=========================== */
+
+#problem{
+    padding:140px 0;
+    overflow:hidden;
+}
+
+.problem-header{
+    width:min(1200px,90%);
+    margin:auto;
+    text-align:center;
+}
+
+.problem-intro{
+    max-width:620px;
+    margin:24px auto 0;
+    color:var(--muted);
+    line-height:1.8;
+}
+
+.problem-scroll{
+
+    margin-top:80px;
+
+    display:flex;
+
+    gap:42px;
+
+    overflow-x:auto;
+    overflow-y:hidden;
+
+    align-items:stretch;
+
+    padding-inline:max(5vw,60px);
+
+    padding-bottom:20px;
+
+    scroll-padding-left:max(5vw,60px);
+
+    scroll-snap-type:x mandatory;
+
+    scrollbar-width:none;
+
+    -webkit-overflow-scrolling:touch;
+
+}
+
+.problem-scroll::-webkit-scrollbar{
+    display:none;
+}
+
+.problem-card{
+
+    flex:0 0 360px;
+
+    min-height:470px;
+
+    border-radius:28px;
+
+    background:rgba(255,255,255,.03);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    backdrop-filter:blur(20px);
+
+    padding:40px;
+
+    scroll-snap-align:start;
+
+    transition:.2s;
+
     position:relative;
-    /* DO NOT set overflow:hidden here — breaks sticky */
-  }
-  #problem-sticky{
-    position:sticky;
-    top:0;
-    height:100vh;
-    overflow:hidden;   /* clips the moving track — panels never escape */
-    z-index:2;
-  }
-  #problem-track{
+
+}
+
+.problem-card:hover{
+
+    transform:translateY(-12px) scale(1.02);
+
+box-shadow:
+0 20px 60px rgba(0,0,0,.35);
+
+}
+
+
+.problem-card h3{
+
+    margin-top:28px;
+
+    font-size:34px;
+
+    line-height:1.2;
+
+}
+
+.problem-card p{
+
+    margin-top:22px;
+
+    color:var(--muted);
+
+    line-height:1.8;
+
+}
+
+.problem-number{
+
+    font-size:72px;
+
+    font-weight:800;
+
+    opacity:.08;
+
+    position:absolute;
+
+    right:30px;
+
+    top:25px;
+
+}
+.problem-icon{
+
+    width:58px;
+    height:58px;
+
     display:flex;
-    /* Exact width: 5 panels × 100vw */
-    width:500vw;
-    height:100%;       /* fills the 100vh sticky container exactly */
-    will-change:transform;
-  }
-  .problem-panel{
-    /* Each panel owns exactly one viewport width */
-    width:100vw;
-    flex-shrink:0;     /* never shrink — must stay exactly 100vw */
-    height:100%;       /* fills the 100vh track height */
-    display:flex;
-    flex-direction:column;
     align-items:center;
     justify-content:center;
-    padding:80px;
-    border-right:1px solid var(--border);
-    position:relative;
-    overflow:hidden;   /* decorative numbers stay inside */
-    box-sizing:border-box;
-  }
-  /* Decorative giant number — absolutely positioned, clipped by panel */
-  .problem-number{
-    font-size:clamp(100px,18vw,200px);
-    font-weight:800;
-    position:absolute;
-    opacity:.04;
-    letter-spacing:-.05em;
-    color:#fff;
-    top:50%;left:50%;
-    transform:translate(-50%,-50%);
-    pointer-events:none;
-    user-select:none;
-    white-space:nowrap;
-  }
-  /* Per-panel animated canvas background */
-  .problem-panel-canvas{
-    position:absolute;
-    inset:0;
-    width:100%;height:100%;
-    pointer-events:none;
-    z-index:0;
-    opacity:.5;
-  }
-  /* All panel content must sit above its canvas */
-  .problem-panel > *:not(.problem-panel-canvas):not(.problem-number){
-    position:relative;
-    z-index:1;
-  }
-  .problem-icon{
-    font-size:72px;
-    margin-bottom:32px;
-    filter:drop-shadow(0 0 32px rgba(200,255,77,.35));
-    animation:float 4s ease-in-out infinite;
-  }
-  .problem-panel:nth-child(2) .problem-icon{animation-delay:0s}
-  .problem-panel:nth-child(3) .problem-icon{animation-delay:.6s}
-  .problem-panel:nth-child(4) .problem-icon{animation-delay:1.2s}
-  .problem-panel:nth-child(5) .problem-icon{animation-delay:1.8s}
-  @keyframes float{
-    0%,100%{transform:translateY(0)}
-    50%{transform:translateY(-14px)}
-  }
-  .problem-label{
-    font-size:11px;letter-spacing:.25em;text-transform:uppercase;
-    color:var(--accent);margin-bottom:24px;
-    display:flex;align-items:center;gap:10px;
-  }
-  .problem-label::before{
-    content:'';width:24px;height:1px;background:var(--accent);flex-shrink:0;
-  }
-  .problem-headline{
-    font-size:clamp(28px,4.5vw,68px);
-    font-weight:700;
-    line-height:1.05;
-    letter-spacing:-.03em;
-    text-align:center;
-    max-width:680px;
-    word-break:break-word;
-  }
-  .problem-desc{
-    font-size:16px;color:var(--muted);margin-top:24px;
-    text-align:center;max-width:480px;line-height:1.75;
-  }
-  /* Responsive: on mobile, switch to vertical scroll */
-  @media(max-width:768px){
-    #problem-wrapper{height:auto}
-    #problem-sticky{position:static;height:auto;overflow:visible}
-    #problem-track{
-      width:100%;
-      flex-direction:column;
-      height:auto;
-    }
-    .problem-panel{
-      width:100%;
-      height:auto;
-      min-height:100svh;
-      padding:100px 24px 80px;
-    }
-    .problem-panel-canvas{display:none}
-  }
+
+    border-radius:16px;
+
+    background:rgba(170,255,0,.08);
+
+    border:1px solid rgba(170,255,0,.18);
+
+    color:var(--accent);
+
+    margin-bottom:18px;
+
+}
+.problem-icon svg{
+
+    width:28px;
+    height:28px;
+
+    stroke-width:2;
+
+}
+
+.problem-label{
+
+    margin-top:24px;
+
+    color:var(--accent);
+
+    font-size:14px;
+
+    letter-spacing:2px;
+
+    text-transform:uppercase;
+
+}
 
   /* ══════════════════════════════════════════
      SOLUTION SECTION — FULLY REBUILT
@@ -992,7 +1041,37 @@ transform: none ;
   transform:translateY(-2px);
 }
 
+/* ================= MOBILE ================= */
 
+@media (max-width:768px){
+
+  .investment-grid{
+    grid-template-columns:1fr;
+    gap:24px;
+    max-width:100%;
+    margin-top:48px;
+  }
+
+  .plan-card{
+    padding:40px 24px;
+    border-radius:20px !important;
+  }
+
+  .plan-card:first-child,
+  .plan-card:nth-child(2),
+  .plan-card:last-child{
+    border-radius:20px !important;
+  }
+
+  .plan-price{
+    font-size:52px;
+  }
+
+  .plan-features li{
+    font-size:15px;
+  }
+
+}
 /* Tablet */
 @media (max-width:1100px){
   .investment-grid{
@@ -1364,7 +1443,7 @@ transform: none ;
     <a href="#investment">Pricing</a>
     <a href="#process">Process</a>
   </div>
-  <button class="nav-cta" onclick="scrollTo({top:document.body.scrollHeight,behavior:'smooth'})">Book Strategy Call</button>
+  <button class="nav-cta" onclick="scrollTo({top:document.body.scrollHeight,behavior:'smooth'})"><a href="https://calendly.com/offical-brandmeup/new-meeting"target="_blank">Book Free Strategy Call</a></button>
 </nav>
 
 <!-- ══════════════ HERO ══════════════ -->
@@ -1381,8 +1460,8 @@ transform: none ;
       You become the authority.
     </p>
     <div class="hero-actions">
-      <button class="btn-primary">Book Free Strategy Call</button>
-      <button class="btn-secondary">See How It Works ↓</button>
+      <button class="btn-primary"><a href="https://calendly.com/offical-brandmeup/new-meeting"target="_blank">Book Free Strategy Call</a></button>
+      <!--<button class="btn-secondary">See How It Works ↓</button>-->
     </div>
   </div>
   <div class="hero-visual" id="hero-visual">
@@ -1426,69 +1505,109 @@ transform: none ;
   </div>
 </div>
 
-<!-- ══════════════ SECTION 1: THE PROBLEM ══════════════ -->
-<!--
-  SCROLL CONTRACT:
-  #problem-wrapper height = 500vh (5 panels × 100vh scroll budget).
-  GSAP: start='top top', end='bottom bottom'
-  → pin releases exactly when the last panel finishes, before Solution appears.
--->
-<div id="problem-wrapper">
-  <div id="problem-sticky">
-    <div id="problem-track">
+<!-- ══════════════ SECTION 1 copy for testing: THE PROBLEM ══════════════ -->
+<!-- ================= PROBLEM SECTION ================= -->
+<section id="problem">
 
-      <!-- Panel 0: Intro -->
-      <div class="problem-panel">
-        <canvas class="problem-panel-canvas" id="prob-canvas-0"></canvas>
-        <div class="problem-number">00</div>
-        <div class="section-eyebrow" style="justify-content:center;position:relative;z-index:1">The Problem</div>
-        <h2 class="section-title" style="text-align:center;position:relative;z-index:1">Why Most Personal<br>Brands <span class="accent">Fail</span></h2>
-        <p style="font-size:16px;color:var(--muted);text-align:center;max-width:420px;margin-top:20px;line-height:1.75;position:relative;z-index:1">The same four walls keep brilliant people invisible. Scroll to see which one is stopping you.</p>
-      </div>
+    <div class="problem-header">
 
-      <!-- Panel 1 -->
-      <div class="problem-panel">
-        <canvas class="problem-panel-canvas" id="prob-canvas-1"></canvas>
-        <div class="problem-number">01</div>
-        <div class="problem-icon">⏱️</div>
-        <div class="problem-label">Problem 01</div>
-        <h3 class="problem-headline">No time to<br>create content.</h3>
-        <p class="problem-desc">You're too busy running your business to run your brand. The content never gets made.</p>
-      </div>
+        <div class="section-eyebrow">
+            The Problem
+        </div>
 
-      <!-- Panel 2 -->
-      <div class="problem-panel">
-        <canvas class="problem-panel-canvas" id="prob-canvas-2"></canvas>
-        <div class="problem-number">02</div>
-        <div class="problem-icon">🤷</div>
-        <div class="problem-label">Problem 02</div>
-        <h3 class="problem-headline">Don't know<br>what to say.</h3>
-        <p class="problem-desc">You have expertise but no framework to turn it into compelling content that converts.</p>
-      </div>
+        <h2 class="section-title">
+            Why Most Personal<br>
+            Brands <span class="accent">Fail</span>
+        </h2>
 
-      <!-- Panel 3 -->
-      <div class="problem-panel">
-        <canvas class="problem-panel-canvas" id="prob-canvas-3"></canvas>
-        <div class="problem-number">03</div>
-        <div class="problem-icon">💸</div>
-        <div class="problem-label">Problem 03</div>
-        <h3 class="problem-headline">Production is<br>expensive.</h3>
-        <p class="problem-desc">Studios, editors, designers — good production costs a fortune when you piece it together alone.</p>
-      </div>
+        <p class="problem-intro">
+            The same four walls keep brilliant people invisible.
+            Every successful creator solves these first.
+        </p>
 
-      <!-- Panel 4 -->
-      <div class="problem-panel">
-        <canvas class="problem-panel-canvas" id="prob-canvas-4"></canvas>
-        <div class="problem-number">04</div>
-        <div class="problem-icon">📉</div>
-        <div class="problem-label">Problem 04</div>
-        <h3 class="problem-headline">No strategy.<br>No growth.</h3>
-        <p class="problem-desc">Posting randomly and hoping for the best. Without a strategy, effort doesn't compound.</p>
-      </div>
+    </div>
 
-    </div><!-- /#problem-track -->
-  </div><!-- /#problem-sticky -->
-</div><!-- /#problem-wrapper -->
+    <div class="problem-scroll">
+
+        <div class="problem-card">
+
+            <div class="problem-number">01</div>
+
+<div class="problem-icon">
+    <i data-lucide="clock-3"></i>
+</div>
+
+            <div class="problem-label">Problem 01</div>
+
+            <h3>No time to create content.</h3>
+
+            <p>
+                You're too busy running your business to run your
+                personal brand.
+            </p>
+
+        </div>
+
+        <div class="problem-card">
+
+            <div class="problem-number">02</div>
+
+<div class="problem-icon">
+    <i data-lucide="brain-circuit"></i>
+</div>
+
+            <div class="problem-label">Problem 02</div>
+
+            <h3>Don't know what to say.</h3>
+
+            <p>
+                You have expertise but no framework to convert it
+                into compelling content.
+            </p>
+
+        </div>
+
+        <div class="problem-card">
+
+            <div class="problem-number">03</div>
+
+<div class="problem-icon">
+    <i data-lucide="laptop"></i>
+</div>
+
+            <div class="problem-label">Problem 03</div>
+
+            <h3>No Reliable System.</h3>
+
+            <p>
+                Without a direction or process, creating content becomes fortune.
+            </p>
+
+        </div>
+
+        <div class="problem-card">
+
+            <div class="problem-number">04</div>
+
+<div class="problem-icon">
+    <i data-lucide="trending-down"></i>
+</div>
+
+            <div class="problem-label">Problem 04</div>
+
+            <h3>No strategy. No growth.</h3>
+
+            <p>
+                Posting randomly doesn't build authority or generate
+                predictable business.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
 
 <!-- ══════════════ SECTION 2: THE SOLUTION ══════════════ -->
 <section id="solution">
@@ -1653,7 +1772,7 @@ transform: none ;
     </div>
     <div class="result-card reveal-up" style="transition-delay:.1s">
       <span class="result-number" data-target="30">0<span class="accent"> Days</span></span>
-      <span class="result-label">To First 10K Views</span>
+      <span class="result-label">Consistent Efforts For You</span>
     </div>
     <div class="result-card reveal-up" style="transition-delay:.2s">
       <span class="result-number" data-target="3"><span class="accent">×</span>0</span>
@@ -1775,7 +1894,7 @@ transform: none ;
     </div>
     <div class="timeline-item reveal-up">
       <div class="timeline-dot"></div>
-      <div class="timeline-week">Day 2-4</div>
+      <div class="timeline-week">Day 2-3</div>
       <div class="timeline-content">
         <h3>Discovery</h3>
         <p>Deep-dive brand session. Audience research. Competitive landscape analysis. We surface what makes you genuinely different.</p>
@@ -1783,7 +1902,7 @@ transform: none ;
     </div>
     <div class="timeline-item reveal-up">
       <div class="timeline-dot"></div>
-      <div class="timeline-week">Day 5-6</div>
+      <div class="timeline-week">Day 4</div>
       <div class="timeline-content">
         <h3>Visual Identity</h3>
         <p>Logo. Color system. Typography. Photography direction. Your visual world, built to be immediately recognisable.</p>
@@ -1791,18 +1910,26 @@ transform: none ;
     </div>
     <div class="timeline-item reveal-up">
       <div class="timeline-dot"></div>
-      <div class="timeline-week">Day 7-8</div>
+      <div class="timeline-week">Day 5-6</div>
       <div class="timeline-content">
-        <h3>Messaging</h3>
-        <p>Positioning statement. Brand voice. Core messages. Your story, crystallised into language that lands.</p>
+        <h3>Script Planning</h3>
+        <p>Every video is planned before the camera rolls. Hooks, structure and CTAs are crafted for maximum impact.</p>
       </div>
     </div>
     <div class="timeline-item reveal-up">
       <div class="timeline-dot"></div>
-      <div class="timeline-week">Day 9</div>
+      <div class="timeline-week">Day 7</div>
       <div class="timeline-content">
         <h3>Content</h3>
-        <p>First production day. Scripts approved. Content captured and edited. Your 90-day calendar fully mapped.</p>
+        <p>First production day. Scripts approved. Content captured. Your calendar fully mapped.</p>
+      </div>
+    </div>
+    <div class="timeline-item reveal-up">
+      <div class="timeline-dot"></div>
+      <div class="timeline-week">Day 8-9</div>
+      <div class="timeline-content">
+        <h3>Video Refinement</h3>
+        <p>Every video is edited, refined and optimized for maximum impact before it goes live.</p>
       </div>
     </div>
     <div class="timeline-item reveal-up">
@@ -1920,7 +2047,7 @@ transform: none ;
       <div class="plan-name">Dominate</div>
       <div class="plan-price" ><sub>$</sub>3,375</div>
       <p class="plan-desc">Full-production content partnership. We run your brand presence so you can run your business.</p>
-      <ul class="plan-features"><br>
+      <ul class="plan-features">
         <li><span class="check">✦</span>30 Shorts / mo</li>
         <li><span class="check">✦</span>Onboarding & review calls</li>
         <li><span class="check">✦</span> Research & scripting</li>
@@ -2053,7 +2180,7 @@ function playHeroAnimations(){
 // The pin only releases after the wrapper's bottom edge
 // has scrolled completely past the viewport bottom —
 // meaning all 5 panels are fully shown before Solution appears.
-(function(){
+/*(function(){
   const problemTrack = document.getElementById('problem-track');
   const problemWrapper = document.getElementById('problem-wrapper');
   if(!problemTrack || !problemWrapper) return;
@@ -2298,7 +2425,7 @@ function playHeroAnimations(){
     }
     resize(); window.addEventListener('resize', resize); draw();
   })();
-})();
+})();*/
 
 // ════════════════════════════════════════════
 // SOLUTION SECTION — SCROLL-DRIVEN PIPELINE
@@ -2882,7 +3009,13 @@ gsap.utils.toArray('.result-card').forEach((card,i)=>{
     opacity:0,y:40,scale:.96,duration:.8,delay:i*.1,ease:'power3.out',
     scrollTrigger:{trigger:'#results .results-grid',start:'top 80%'}
   });
+  
 });
+
+</script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+  lucide.createIcons();
 </script>
 </body>
 </html>
