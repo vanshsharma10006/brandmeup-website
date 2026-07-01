@@ -30,14 +30,23 @@
     font-display:swap;
   }
   html{scroll-behavior:smooth;overflow-x:hidden}
-  body{
+
+  body {
+    background: var(--bg);
+    color: white;
+    font-family: var(--font-body);
+    cursor: none;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+  /* body{
     background:var(--bg);
     color:var(--white);
     font-family:var(--font-body);
     cursor:none;
     overflow-x:hidden;
     -webkit-font-smoothing:antialiased;
-  }
+  } */
   ::selection{background:var(--accent);color:#000}
   a{color:inherit;text-decoration:none}
 
@@ -892,12 +901,43 @@ transform: none ;
     display:grid;grid-template-columns:1fr 1fr;gap:2px;
     margin-top:80px;max-width:900px;margin-left:auto;margin-right:auto;
   }
-  .plan-card{
-    padding:64px 48px;background:var(--card);
-    border:1px solid var(--border);position:relative;overflow:hidden;
+  .plan-card {
+  padding: 64px 48px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  flex: 1 1 280px;      
+  max-width: 400px;
+  margin-top: 10px;
+  position: relative;    
+  border-radius: 24px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.plan-card:first-child {
+  border-radius: 24px;
+}
+.plan-card:last-child {
+  border-radius: 24px;
+  background: rgba(200, 255, 77, 0.04);
+  border-color: rgba(200, 255, 77, 0.15);
+}
+
+@media (max-width: 768px) {
+  .investment-grid {
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
   }
-  .plan-card:first-child{border-radius:24px 0 0 24px}
-  .plan-card:last-child{border-radius:0 24px 24px 0;background:rgba(200,255,77,.04);border-color:rgba(200,255,77,.15)}
+
+  .plan-card {
+    flex: none;
+    width: 100%;
+    max-width: 100%;
+    padding: 32px 24px;
+    border-radius: 24px !important;  
+  }
+}
   .plan-name{font-size:14px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:24px}
   .plan-price{font-size:clamp(40px,5vw,72px);font-weight:800;letter-spacing:-.04em;margin-bottom:8px}
   .plan-price sub{font-size:20px;font-weight:400;color:var(--muted);vertical-align:super;font-size:18px}
@@ -969,6 +1009,7 @@ transform: none ;
 .plan-price{
   font-size:clamp(40px,5vw,72px);
   font-weight:800;
+  color: white;
   letter-spacing:-.04em;
   margin-bottom:8px;
 }
@@ -1020,11 +1061,16 @@ transform: none ;
   letter-spacing:.02em;
 }
 
-.plan-btn.outline{
+.plan-btn.outline {
+    background: #c8ff4d;
+    border: 1px solid var(--border);
+    color: #141416;
+}
+/* .plan-btn.outline{
   background:transparent;
   border:1px solid var(--border);
   color:var(--white);
-}
+} */
 
 .plan-btn.filled{
   background:var(--accent);
@@ -1222,17 +1268,52 @@ transform: none ;
   .client-name{font-size:20px;font-weight:600;letter-spacing:-.01em;margin-bottom:8px}
   .client-tagline{font-size:13px;color:var(--muted)}
   .client-result{
-    position:absolute;inset:0;background:rgba(5,5,5,.95);
-    display:flex;flex-direction:column;align-items:center;
-    justify-content:center;padding:40px;
-    opacity:0;transform:translateY(20px);
+    position:absolute;
+    inset:0;
+    background:rgba(5,5,5,.95);
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+
+    padding:40px;
+
+    opacity:.67;              /* default visible */
     transition:all .4s cubic-bezier(.23,1,.32,1);
-  }
-  .client-card:hover .client-result{opacity:1;transform:translateY(0)}
-  .client-result-num{
-    font-size:56px;font-weight:800;color:var(--accent);
-    letter-spacing:-.04em;margin-bottom:8px;
-  }
+}
+
+.client-card:hover .client-result{
+    opacity:1;
+}
+.client-result-label{
+    font-size:14px;
+    color:var(--muted);
+    text-align:center;
+
+    opacity:0;
+    transform:translateY(10px);
+    transition:.35s;
+}
+
+.client-card:hover .client-result-label{
+    opacity:1;
+    transform:translateY(0);
+}
+.client-result-num{
+    font-size:56px;
+    font-weight:800;
+    color:var(--accent);
+    letter-spacing:-.04em;
+    margin-bottom:8px;
+
+    opacity:.5;
+    transition:.35s;
+}
+
+.client-card:hover .client-result-num{
+    opacity:1;
+}
   .client-result-label{font-size:14px;color:var(--muted);text-align:center}
 
   /* ── FOOTER ── */
@@ -1877,7 +1958,7 @@ transform: none ;
 
 
 
-<!-- ══════════════ SECTION 8: PROCESS ══════════════ -->
+<!- ══════════════ SECTION 8: PROCESS ══════════════ -->
 <section id="process">
   <div class="section-eyebrow">Our Process</div>
   <h2 class="section-title">From Zero to<br>Live in <span class="accent">10 days</span></h2>
@@ -2027,9 +2108,9 @@ transform: none ;
       </ul>
       <button class="plan-btn outline"><a href="https://calendly.com/offical-brandmeup/new-meeting"target="_blank">Book a Call</a></button>
     </div>
-<div class="plan-card reveal-up">
+    <div class="plan-card reveal-up">
       <div class="plan-name">Scale</div>
-      <div class="plan-price" style="color:var(--accent)"><sub>$</sub>2,625</div>
+      <div class="plan-price" style="color:var(--white)"><sub>$</sub>2,625</div>
       <p class="plan-desc">Your entire brand foundation, delivered in 10 days. The launchpad every authority-building journey needs.</p>
       <ul class="plan-features">
         <li><span class="check">✦</span>20 Shorts / mo</li>
